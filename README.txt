@@ -1,0 +1,189 @@
+GRIMWEPA
+by DERV
+
+Feb 17, 2010
+derv82@gmail.com
+code.google.com/p/grimwepa
+
+
+THANKS
+SandMan       : Introducing me to the wide world of Backtrack, 
+                   teaching me linux one bad command at a time.
+ShamanVirtuel : Basic GUI design. SpoonWEP was a HUGE inspiration!
+okra_man      : Came up with the idea for Injection Test option.
+		    Also, he suggested a MAC changer option.
+mrkazu        : Suggested channels that go up to 14 for European support. 
+		    "These go to 11!"
+
+
+
+      G R I M   W E P A
+
+
+
+A WEP and WPA cracker for Linux.
+
+Written in Java.
+Open source.
+
+Built for Backtrack 4 (Ubuntu).
+Reported working on Auditor.
+
+Utilizes aircrack-ng suite.
+Required applications:
+	airmon-ng
+	aircrack-ng
+	airodump-ng
+	aireplay-ng
+	packetforge-ng
+	
+also:	macchanger
+	ifconfig
+
+
+This program DOES NOT CRACK WEP OR WPA FOR YOU.
+This program runs programs (such as aircrack-ng, aireplay-ng, airodump-ng, etc).
+This program merely AUTOMATES the WEP/WPA cracking process.
+
+This program uses the same cracking methods that SpoonWEP, SpoonWPA, and Gerix use(d).
+
+If you don't know what this program does behind-the-scenes, then
+  you should learn by cracking your own access point using command-line only.
+A simple google search for 'aircrack fragmentation' will land on a tutorial.
+
+
+
+[TUTORIAL]
+
+** Start Up **
+
+To run GrimWepa, navigate to the JAR file in the console and type:
+
+java -jar grimwepa_X.X.jar
+
+(X.X being the version you have).
+This will load the program and display the GUI within a few seconds.
+
+When GrimWepa first loads, it will check if any devices are in Monitor Mode.
+	Monitor mode is a state that some wifi cards can be in so they can
+	collect data packets which are not destined for themselves.  This is
+	crucial for receiving data packets to crack WEP and WPA access points.
+
+If there are no found devices in monitor mode, GrimWepa will enumerate all 
+	possible wifi devices and ask you to select a device to put into
+	Monitor Mode.  Once you select a device and press "OK", GrimWepa will
+	put the device into monitor mode using airmon-ng, then add it to the list
+	of WiFi devices, automatically selecting the device it just put into MM.
+
+Once we have a selected wifi device, we can begin to search for targets.
+
+** Search **
+
+Click the "Refresh Targets" button to begin the search for targets.  If you want
+	to only search a specific channel, uncheck the "All Channels" option and 
+	drag the slider to the channel you want to stay on.
+
+After a few seconds (usually around 5), access points should appear in the list.
+	Some people have reported that they get a FileNotFoundException printout
+	in the console.  This is usually due to an invalid WiFi device selection.
+
+Note: GrimWepa will display the airodump-ng window (minimized by default) in an 
+	XTerm window.  You can view the airodump output by maximizing the window.
+	GrimWepa will ONLY ADD WEP AND WPA/WPA2 access points to the list!
+	If you are surrounded by OPEN networks and nothing else, the list will
+	remain empty!
+
+After you see your target in the list, click "Stop Refreshing", select your target,
+	and depending on if your target is WPA or WEP, start the attack.
+
+** Attacks **
+
+WEP:
+	There are 5 kinds of WEP attacks (Arp-replay, Chop-chop, Fragmentation, 
+	Cafe-latte, and p0841).  Some attacks only work with certain access points 
+	I have had lots of luck with ARP-replay (on an access point with activity) 
+	and Fragmentation (on an access point with no clients/activity).  Your own
+	wifi cards and access points will vary, so find a method that works for you.
+	
+	It is not necessary to change your MAC address ("Change MAC" button) to
+	crack WEP sucessfully, but some routers may require it.  Use Change MAC if
+	other methods are unsucessful.
+
+WPA:
+	We want to crack the WPA access point.
+	To crack it, we need to get the 4-way handshake.
+	To get the 4-way handshake, we need a client to connect to the access point.
+	
+	The Deauthentication attack will try to deauthenticate a client (if one is 
+	selected) or the entire access point (if no client is selected).
+	To increase your chances of getting a handshake, get as close as possible
+	to the access point and wait for someone to connect.  If there's already
+	a client connected, select their MAC address so GrimWepa will deauthenticate
+	them, forcing them to reconnect, and forcing a handshake to be broadcasted.
+	
+	After a handshake is received, the "Start Cracking" will become enabled.
+	You can type in the location of a password list you would like to use (path)
+	or type the path to a non-existent file ('use_default_damnit') to force
+	GrimWepa to use the default password list.  The default password list
+	contains about 250,000 passwords (all over 8 characters in length) that I
+	compiled from many different wordlists.  I know that Backtrack 4 has a
+	wordlists folder located at /pentest/passwords/wordlists/ at least
+	one file in there (darkc0de.lst).
+
+
+Good luck!
+
+
+
+[TROUBLESHOOTING]
+
+    * Run as Root! I hate running executables as root, but I tried running 
+	GrimWepa as an unprivileged user and was met with errors.
+	
+    * Are you booting from a DVD, USB, or is it installed on your system? 
+	GrimWepa writes some files to the disk [temporarily] and a 
+	DVD/non-persistent USB boot may cause the program to fail. 
+	You could try running GrimWepa from the directory /ramdisk/, 
+	where it should be able to save files -- Note: /ramdisk/ lets 
+	you write and save data to the RAM, which will be wiped upon reboot.
+	
+    * Make sure you choose a Wifi card that can go into monitor mode. 
+	Some wifi cards create a 'mon0' interface for a wifi card that is 
+	in montior mode; You may want to try both the wlan# and mon# interfaces 
+	until you find the right one.
+	
+    * Last possible check: To make sure airodump works with your wifi card, 
+	try typing (in console): 
+	"airodump-ng -w targets --output-format csv mon0"
+	where mon0 is your wificard's interface. This is the command that 
+	GrimWepa uses, and if targets-01.csv isn't created in the folder you 
+	run it in, this could mean there is a write-permissions problem.
+
+
+
+
+[SOURCE CODE]
+
+Since GrimWepa is open-source, the code is available to everyone!
+If you're new to java programming, then you should know that a
+recent java compiler is required.  I used the Sun Java6 JDK.
+
+A compiler isn't necessary to VIEW the source code, but it is
+reqired to COMPILE the source code (if you make any changes).
+
+To get the Sun Java6 JDK, type:
+    apt-get install sun-java6-jdk
+
+
+To download the source code, type:
+    svn checkout http://grimwepa.googlecode.com/svn/trunk/
+
+To compile, navigate to trunk/ and type:
+    javac test2.java
+
+To run, type:
+    java test2
+
+If you want to join the team (so far it's just me) and help make GrimWepa better,
+  shoot me an e-mail and I will add you to the members list 
+    (so you can post commits and make revisions).
