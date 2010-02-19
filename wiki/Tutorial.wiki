@@ -59,8 +59,12 @@ There are 5 kinds of WEP attacks:
  * Cafe-latte,
  * p0841).
 Some attacks only work with certain access points I have had lots of luck with ARP-replay (on an access point with activity) and Fragmentation (on an access point with no clients/activity).  Your own wifi cards and access points will vary, so find a method that works for you.
-	
+
 It is not necessary to change your MAC address ("Change MAC" button) to crack WEP sucessfully, but some routers may require it.  Use Change MAC if other methods are unsucessful.
+
+GrimWepa will automatically begin cracking the WEP key after it has collected 10,000 IVs (initialization vectors, or "Data" packets).  You can start the cracker prior to this point by clicking Start Cracking. This is not recommended, since the chances of cracking a WEP key prior to 10,000 IVs is low; also, if the key IS cracked right before 10,000 IVs are captured, then GrimWepa MAY ignore the first crack and start the cracking session over (this is a known bug). 
+
+When GrimWepa (aircrack-ng) has cracked your WEP password, it will display the password in the status bar and also save the key in a text file "wepcracked.txt" in the same directory as the Jar file.
 
 ----
 
