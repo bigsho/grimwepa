@@ -57,7 +57,7 @@ There are 5 kinds of WEP attacks:
  * Chop-chop,
  * Fragmentation,
  * Cafe-latte,
- * p0841).
+ * p0841.
 Some attacks only work with certain access points I have had lots of luck with ARP-replay (on an access point with activity) and Fragmentation (on an access point with no clients/activity).  Your own wifi cards and access points will vary, so find a method that works for you.
 
 It is not necessary to change your MAC address ("Change MAC" button) to crack WEP sucessfully, but some routers may require it.  Use Change MAC if other methods are unsucessful.
