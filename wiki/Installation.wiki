@@ -4,7 +4,7 @@
 = GRIM WEPA INSTALLATION GUIDE =
 
 *STEP 0 : BEFORE* we start.
-If, for some reason, you can not get internet access on VMWare, I can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.
+If, for some reason, you can not get internet access in BackTrack4, I can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first two steps are downloading grimwepa and the install.sh file, so if you already have those, skip to STEP 3!
 
 
 *STEP 1 : DOWNLOAD* grimwepa to your harddrive.
@@ -14,7 +14,7 @@ You should see a black background with text that says something like:
 {{{
 root@bt:~#
 }}}
-Note: If you're booting from VMWare, from an installation, or off of a USB, you should be fine and can ignore this paragraph and skip to the 'wget' code. However, if you are booting into BT4 using a bootable DVD, you MAY need to navigate to the directory /ramdisk/ so you can work with files not included on the DVD. Also, bootable DVD's and non-persistent USB boots into BT4 will wipe all the changes you make upon reboot. I don't know how to add GrimWepa as a module to the BT4 ISO file, so you'll have to do these steps below every time you boot into BT4.
+Note: If you're booting from VMWare, from an installation, or off of a USB, you should be fine and can ignore this paragraph and skip to the 'wget' code. However, if you are booting into BT4 using a bootable DVD, you MAY need to navigate to the directory /ramdisk/ so you can work with files not included on the DVD. Also, bootable DVD's and non-persistent USB sessions will wipe all the changes you make upon reboot. I don't know how to add GrimWepa as a module to the BT4 ISO file, so you'll have to do these steps below every time you boot into BT4.
 Sorry!
 To navigate to /ramdisk/, at the console, type:
 {{{
@@ -25,7 +25,7 @@ To download grimwepa, type the following into the console:
 {{{
 wget http://grimwepa.googlecode.com/files/grimwepa_0.9.jar
 }}}
-Alternatively, you could copy that code and paste it into console using Shift+Insert. The wg et program will download grimwepa to the current directory that console is in (usually the default is root). You should now see the file grimwepa_0.9.jar appear (next to other files/directories) when you type:
+Alternatively, you could copy that code and paste it into console using Shift+Insert. The wget command will download grimwepa to the current directory that console is in (usually the default is root). You should now see the file grimwepa_0.9.jar appear (next to other files/directories) when you type:
 {{{
 ls
 }}}
@@ -47,7 +47,7 @@ ls
 You will need both of these files before moving on.
 
 
-*STEP 3 : CHANGE PERMISSIONS* of the shell file
+*STEP 3 : CHANGE PERMISSIONS* of the install script
 
 We can't just run the shell file : we need to change the permissions before we can run it. To change the permissions, type this into the same console window:
 {{{
@@ -68,7 +68,7 @@ grimwepa
 }}}
 GrimWepa should open up (after a few seconds), proving the installation was successful. GrimWepa should also be in your menu under "BackTrack > Radio Network Analysis > 80211 > Cracking". You can also run GrimWepa by typing "grimwepa" into any console anywhere!
 
-If this installation guide doesn't work, or if I should add/change something (experts), send me a PM so I can correct the problems. Hopefully there are no errors; if you have any, copy/paste the errors to me in an post reply, PM, or e-mail! I <3 bug reports
+If this installation guide doesn't work, or if I should add/change something (experts), let me know via e-mail so I can correct the problems. Hopefully there are no errors; if you have any, copy/paste the errors to me in an e-mail! I <3 bug reports
 
 ..........
 
@@ -77,14 +77,15 @@ If this installation guide doesn't work, or if I should add/change something (ex
 So you enjoyed GrimWepa, but now you're grown up, tired of shoddily-automated scripts, and want to banish GrimWepa to the great /dev/null in the sky, eh?
 
 To undo everything that the install script did (basically, to Uninstall GrimWepa), type:
-Code:
+{{{
 ./install.sh remove
+}}}
 You'll still have to delete the .jar file you downloaded manually:
 {{{
 rm grimwepa_0.9.jar
 }}}
+
 But you don't want to uninstall it... right? 
 
-Thanks for using Grim Wepa!!!
 
-Derv
+Thanks for using Grim Wepa!!!
