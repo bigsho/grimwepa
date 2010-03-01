@@ -4,7 +4,12 @@
 = GRIM WEPA INSTALLATION GUIDE =
 
 *STEP 0 : BEFORE* we start.
-If, for some reason, you can not get internet access in BackTrack4, I can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first two steps are downloading grimwepa and the install.sh file, so if you already have those, skip to STEP 3!
+
+=== _IF you attempt to install GrimWepa from the Backtrack4 desktop on a USB-booted distro, the following steps will *OVERWRITE BT4's INSTALL.SH FILE!!!*_ ===
+
+_Please go into a different directory if you wish to keep the install.sh file._
+
+If you can not get internet access in BackTrack4, I can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first two steps are downloading grimwepa and the install.sh file, so if you already have those, skip to STEP 3!
 
 
 *STEP 1 : DOWNLOAD* grimwepa to your harddrive.
