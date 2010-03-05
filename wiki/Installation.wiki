@@ -12,7 +12,7 @@ su
 }}}
 then enter the password for your root account.
 
-If you can not get internet access on your system, this install guide can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first two steps are downloading grimwepa and the grimstall.sh file, so if you already have those, skip to STEP 3!
+If you can not get internet access on your system, this install guide can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first step is simply downloading the grimstall.sh file, so if you already have it, skip to STEP 2!
 
 
 *STEP 1 : DOWNLOAD* the GrimWepa install script (grimstall.sh)
@@ -42,7 +42,7 @@ Note: the first letter is a lower-case L, not a capital i.
 After you have the GrimWepa install script on your computer (or in RAM via the /ramdisk/ directory), you can move on.
 
 
-*STEP 3 : CHANGE PERMISSIONS* of the install script
+*STEP 2 : CHANGE PERMISSIONS* of the install script
 
 We can't just run the shell script file : we need to change the permissions before we can run it. To change the permissions, type this into the same console window:
 {{{
@@ -51,9 +51,9 @@ chmod 755 grimstall.sh
 You won't see any output or confirmation, so just assume that the permissions were changed accordingly.
 
 
-*STEP 4 : INSTALL!!!*
+*STEP 3 : INSTALL!!!*
 
-*The grimstall.sh script _will download and install grimwepa v1.0 from this project homepage to your computer!*
+*The grimstall.sh script _will download (if needed) and install grimwepa v1.0 from this project homepage to your computer!*
 
 Now that we have grimstall.sh with the correct permissions, we can begin the install. In the same console that we've been typing in, type:
 {{{
