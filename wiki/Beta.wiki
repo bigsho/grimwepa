@@ -8,7 +8,7 @@ No one wants to test the latest alpha version of Grim Wepa. :[
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
 http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
 
-You can use this code to download and run it:
+You can copy/paste this code into a console window to download and run the latest release:
 
 {{{
 wget http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
