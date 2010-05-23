@@ -1,13 +1,15 @@
 #summary Information on the latest beta of Grim Wepa
 #labels Featured
 
-= This Version is Alpha, not Beta =
+= Alpha Testers Needed! =
 
-No one wants to test the latest alpha version of Grim Wepa.
+No one wants to test the latest alpha version of Grim Wepa. :[
 
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
 http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
+
 You can use this code to download and run it:
+
 {{{
 wget http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
 java -jar grimwepa1.10a2.jar
