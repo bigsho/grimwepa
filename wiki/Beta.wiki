@@ -3,8 +3,6 @@
 
 = Alpha Testers Needed! =
 
-No one wants to test the latest alpha version of Grim Wepa. :[
-
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
 http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
 
@@ -54,22 +52,22 @@ All suggestions, comments, and bug reports are appreciated!!!
 
 = Known Issues =
 
-* your wireless card may not work; this is not my fault
-	* i will not give support for hardware issues
-* pyrit in this version is 'sketchy'
-	* cannot run in an xterm window (no visual output)
-	* the dump file gets updated every 10 min or so (infrequently)
-	* (sometimes) waits for all input before it starts cracking,
-		* ...meaning crunch passthrough takes a LONG time
-* aircrack-ng is apparently 'unstable' with large wordlists (2GB +).
 
-* intel 4965 chipset fix works for some, but not all. unable to test
-* tested with aircrack-ng suite version 1.0 r1661
-	* uses '--output-format csv' arguments with airodump-ng
-	* older versions (BT3's) do not have this option
-* directories with spaces in them have been buggy in the past
-	* i tried fixing this bug in this version; I think it's fixed
-* some people can't run grimwepa using the opensdk or openjdk for java
-	* please use the java6 from sun!
-	* to get the jdk, type:
-		* apt-get install sun-java6-jdk
+	* your wireless card may not work; this is not my fault
+		* you can solve your own hardware issues using google
+	* pyrit in this version is 'sketchy'
+		* cannot run in an xterm window (no visual output)
+		* the dump file gets updated every 10 min or so (infrequently)
+		* (sometimes) waits for all input before it starts cracking
+			* ...meaning crunch passthrough takes a LONG time
+	* aircrack-ng is apparently 'unstable' with large wordlists (2GB +).
+	* intel 4965 chipset fix works for some, but not all. unable to test
+	* tested with aircrack-ng suite version 1.0 r1661
+		* uses '--output-format csv' arguments with airodump-ng
+		* older versions (BT3's) do not have this option
+	* directories with spaces in them have been buggy in the past
+		* i tried fixing this bug in this version; I think it's fixed
+	* some people can't run grimwepa using the opensdk or openjdk for java
+		* please use the java6 from sun!
+		* to get the jdk, type:
+			* apt-get install sun-java6-jdk
