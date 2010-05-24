@@ -4,24 +4,25 @@
 = Alpha Testers Needed! =
 
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
-http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
+[http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar]
 
 You can copy/paste this code into a console window to download and run the latest release:
 
 {{{
-wget http://grimwepa.googlecode.com/files/grimwepa1.10a2.jar
-java -jar grimwepa1.10a2.jar
+wget http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar
+java -jar grimwepa1.10a3.jar
 }}}
 
 This version (and future versions) will contain an installer within the program; so there is no longer a need for a 'grimstall.sh' script.
 
-Please test as much as you can and send me bug reports / comments / suggestions to: derv82 at gmail
+Please test as much as you can.  Post bugs, glitches, and the like to the [http://code.google.com/p/grimwepa/issues/list issues section] OR email derv82 at gmail
 
 All suggestions, comments, and bug reports are appreciated!!!
 
 = What's new in v1.10 =
 	* splash screen
 	* checks required/recommended apps at first load
+	* checks os and if user is signed in as root on every load
 	* install (and uninstall) from inside the app
 		* default install directory: /pentest/wireless/grimwepa/
 		* creates link in /usr/bin/
@@ -49,6 +50,13 @@ All suggestions, comments, and bug reports are appreciated!!!
 		* backwards compatible with grimwepa v1.0
 		* converts hex to ascii when applicable
 		* signs onto WEP and WPA1 encrypted access points using iwconfig
+	
+=== new in Alpha 3 ===
+	* fixed injection test for WEP-based attacks.
+	* added 'verbose' mode for debugging.
+		* to use, add -v argument when executing grimwepa, for example:
+			* java -jar grimwepa1.10b3.jar -v
+			* grimwepa -v
 
 = Known Issues =
 
