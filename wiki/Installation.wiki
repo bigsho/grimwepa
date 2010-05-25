@@ -22,12 +22,6 @@ You should see a black background with text that says something like:
 {{{
 root@bt:~#
 }}}
-Note: If you're booting from VMWare, from an installation, or off of a USB, you should be fine and can ignore this paragraph and skip to the 'wget' code. However, if you are booting into BT4 using a bootable DVD, you MAY need to navigate to the directory /ramdisk/ so you can work with files not included on the DVD. Also, bootable DVD's and non-persistent USB sessions will wipe all the changes you make upon reboot. I don't know how to add GrimWepa as a module to the BT4 ISO file, so you'll have to do these steps below every time you boot into BT4.
-Sorry!
-To navigate to /ramdisk/, at the console, type:
-{{{
-cd /ramdisk/
-}}}
 
 To download the grimwepa install script, type the following into the console:
 {{{
