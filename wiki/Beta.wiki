@@ -70,7 +70,7 @@ All suggestions, comments, and bug reports are appreciated!!!
 			* ...meaning crunch passthrough takes a LONG time
 	* aircrack-ng is apparently 'unstable' with large wordlists (2GB +).
 	* intel 4965 chipset fix works for some, but not all. unable to test
-	* tested with aircrack-ng suite version 1.0 r1661
+	* tested with aircrack-ng suite version 1.0 r.1661
 		* uses '--output-format csv' arguments with airodump-ng
 		* older versions (BT3's) do not have this option
 	* directories with spaces in them have been buggy in the past
