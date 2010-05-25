@@ -19,7 +19,38 @@ Please test as much as you can.  Post bugs, glitches, and the like to the [http:
 
 All suggestions, comments, and bug reports are appreciated!!!
 
-= What's new in v1.10 =
+= Requirements =
+
+=== Required Applications ===
+All of the required/recommended apps _should be_ checked when the program is first loaded. 
+If you are missing any of these apps, the program will alert you accordingly.
+	* the aircrack-ng suite.  Tested with 1.0, should work with 1.1:
+		* airmon-ng
+		* aircrack-ng
+		* airodump-ng
+		* aireplay-ng
+		* packetforge-ng
+	
+	* macchanger - for client-based wep attacks
+	* ifconfig   - put device up/down
+	* iwconfig   - check for monitor mode, signing on
+	* sort      - for wordlist generation
+	* wpa_supplicant - sign on, intel4965 chipset workaround
+
+=== Recommended Applications ===
+
+the below apps aren't required, but grimwepa will use them if
+they are found - just make sure there's a link in /usr/bin/
+
+optional applications:
+	* tshark - strip the handshake from large capture files
+	* pyrit  - cracking, super-fast, gpu-style.
+	* crunch - generating passwords to passthrough to aircrack
+	* uniq   - for removing duplicates in wordlist generation
+	* pw-manager - for filtering passwords (wordlist generator)
+
+
+== What's new in v1.10 ==
 	* splash screen
 	* checks required/recommended apps at first load
 	* checks os and if user is signed in as root on every load
@@ -50,15 +81,15 @@ All suggestions, comments, and bug reports are appreciated!!!
 		* backwards compatible with grimwepa v1.0
 		* converts hex to ascii when applicable
 		* signs onto WEP and WPA1 encrypted access points using iwconfig
-	
-=== new in Alpha 3 ===
+
+=== New in v1.10 alpha 3 ===
 	* fixed injection test for WEP-based attacks.
 	* added 'verbose' mode for debugging.
 		* to use, add -v argument when executing grimwepa, for example:
 			* java -jar grimwepa1.10b3.jar -v
 			* grimwepa -v
 
-= Known Issues =
+== Known Issues ==
 
 
 	* your wireless card may not work; this is not my fault
