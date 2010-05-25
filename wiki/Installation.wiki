@@ -3,7 +3,42 @@
 
 = GRIM WEPA INSTALLATION GUIDE =
 
-*STEP 0 : BEFORE* we start.
+===STEP -1 : SETUP===
+
+Grim Wepa requires certain applications in order to function properly.
+
+*You need Java*
+
+Java comes standard on Backtrack 4, but there is a chance that your distribution doesn't have Java installed.
+
+If you don't have java (typing 'java' into a console gives you a 'command not found' error), you can install the Java Runtime Environment (JRE) using the command:
+{{{
+apt-get install sun-java6-jre
+}}}
+
+In other distributions, you may need to add a repository if 'sun-java6-jre' is not found.
+You need to add the line 
+{{{
+deb http://archive.canonical.com/lucid partner
+}}}
+to the sources list located at /etc/apt/sources.list
+
+_Then_ run the apt-get install command from before.
+
+*You need aircrack-ng*
+
+aircrack-ng comes standard on Backtrack4, but if you need to install it (or want the newest version 1.1), run these these commands in a console (run as root!):
+{{{
+wget http://download.aircrack-ng.org/aircrack-ng-1.1.tar.gz
+tar -zxvf aircrack-ng-1.1.tar.gz
+cd aircrack-ng-1.1
+make
+make install
+}}}
+
+This will install aircrack-ng and all of the tools that comes with it (aireplay-ng, airodump-ng, airmon-ng, packetforge-ng, and aircrack-ng, as well as other applications).
+
+===STEP 0 : Before we start===
 
 *Run these commands as root!*
 To login as root, type:
@@ -15,7 +50,7 @@ then enter the password for your root account.
 If you can not get internet access on your system, this install guide can't help you : that's beyond the scope of these instructions. Also, if you are booting from a DVD, then the "installation" will not be permanent. If you don't fall into these two categories, installation of GrimWepa should be a breeze.  The first step is simply downloading the grimstall.sh file, so if you already have it, skip to STEP 2!
 
 
-*STEP 1 : DOWNLOAD* the GrimWepa install script (grimstall.sh)
+===STEP 1 : DOWNLOAD the GrimWepa install script (grimstall.sh)===
 
 Open a console (Terminal) window (it's the black-box icon near the menu button on the lower-left).
 You should see a black background with text that says something like:
@@ -36,7 +71,7 @@ Note: the first letter is a lower-case L, not a capital i.
 After you have the GrimWepa install script on your computer (or in RAM via the /ramdisk/ directory), you can move on.
 
 
-*STEP 2 : CHANGE PERMISSIONS* of the install script
+===STEP 2 : CHANGE PERMISSIONS of the install script===
 
 We can't just run the shell script file : we need to change the permissions before we can run it. To change the permissions, type this into the same console window:
 {{{
@@ -45,7 +80,7 @@ chmod 755 grimstall.sh
 You won't see any output or confirmation, so just assume that the permissions were changed accordingly.
 
 
-*STEP 3 : INSTALL!!!*
+===STEP 3 : INSTALL!!!===
 
 *The grimstall.sh script _will download (if needed) and install grimwepa v1.0 from this project homepage to your computer!*
 
@@ -71,7 +106,7 @@ If this installation guide doesn't work, or if I should add/change something (ex
 
 ..........
 
-*STEP 99 : UNINSTALL* GrimWepa 
+===STEP 99 : UNINSTALL GrimWepa ===
 
 So you enjoyed GrimWepa, but now you're grown up, tired of shoddily-automated scripts, and want to banish GrimWepa to the great /dev/null in the sky, eh?
 
