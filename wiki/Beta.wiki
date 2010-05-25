@@ -84,9 +84,13 @@ they are found -- Just make sure there's a link in /usr/bin/
 === New in v1.10 alpha 3 ===
 	* fixed injection test for WEP-based attacks.
 	* added 'verbose' mode for debugging.
+		* prints every command executed to the console.
+		* also prints (some of) the system's response to commands.
+		* useful, so testers can copy/paste commands and see what is going wrong.
 		* to use, add -v argument when executing grimwepa, for example:
 			* java -jar grimwepa1.10b3.jar -v
 			* grimwepa -v
+
 
 = Known Issues =
 
@@ -105,7 +109,7 @@ they are found -- Just make sure there's a link in /usr/bin/
 		* older versions (BT3's) do not have this option
 	* directories with spaces in them have been buggy in the past
 		* i tried fixing this bug in this version; I think it's fixed
-	* some people can't run grimwepa using the opensdk or openjdk for java
+	* some people can't run grimwepa using the openjre for java
 		* please use the java6 from sun!
-		* to get the jdk, type:
-			* apt-get install sun-java6-jdk
+		* to get the Java Runtime Environment (JRE) type:
+			* apt-get install sun-java6-jre
