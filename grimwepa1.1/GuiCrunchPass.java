@@ -624,19 +624,8 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 	/** event called when user tries to close window
 		@param e info on event
 	*/
+	
 	public void windowClosing(WindowEvent e) {
-		/*if (threadPassthroughExec.cracking == true) {
-			if (JOptionPane.showConfirmDialog(
-				null,
-				"the passthrough is still being cracked. \n" + 
-				"closing this window will automatically stop the cracking process.\n\n" +
-				"are you sure you want to stop cracking?",
-				"grim wepa | crunch passthrough",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
-				e = null;
-				return;
-			}
-		}*/
 		setVisible(false);
 		Main.guiWindow.setVisible(true);
 		

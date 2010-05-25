@@ -501,8 +501,8 @@ public class Gui extends Frame implements WindowListener, ActionListener, EventL
 		add(panWpa);
 		doLayout();
 		
-		panWep.setVisible(false); // remove
-		panWpa.setVisible(true);  // change to true
+		//panWep.setVisible(false); // remove
+		panWpa.setVisible(false);  // change to false
 		
 		// ROW #7: STATUS BAR & COLOR CHOOSER
 		lblStatus = new JLabel(" inactive");
@@ -528,8 +528,8 @@ public class Gui extends Frame implements WindowListener, ActionListener, EventL
 		add(cboColors);
 		
 		Methods.setEnableWEP(false);
-		btnWpaCrack.setEnabled(true); // remove
-		cboWpaCrackMethod.setEnabled(true); // remove
+		// btnWpaCrack.setEnabled(true); // remove
+		// cboWpaCrackMethod.setEnabled(true); // remove
 	}
 	
 	/** event method; ran whenever a control [which added this form as an action listener] is clicked<p>
