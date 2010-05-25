@@ -39,10 +39,9 @@ If you are missing any of these apps, the program will alert you accordingly.
 
 === Recommended Applications ===
 
-the below apps aren't required, but grimwepa will use them if
-they are found - just make sure there's a link in /usr/bin/
+The below apps aren't required, but grimwepa will use them if
+they are found -- Just make sure there's a link in /usr/bin/
 
-optional applications:
 	* tshark - strip the handshake from large capture files
 	* pyrit  - cracking, super-fast, gpu-style.
 	* crunch - generating passwords to passthrough to aircrack
@@ -50,7 +49,7 @@ optional applications:
 	* pw-manager - for filtering passwords (wordlist generator)
 
 
-== What's new in v1.10 ==
+= What's new in v1.10 =
 	* splash screen
 	* checks required/recommended apps at first load
 	* checks os and if user is signed in as root on every load
@@ -89,7 +88,7 @@ optional applications:
 			* java -jar grimwepa1.10b3.jar -v
 			* grimwepa -v
 
-== Known Issues ==
+= Known Issues =
 
 
 	* your wireless card may not work; this is not my fault
