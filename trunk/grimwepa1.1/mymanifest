@@ -1,4 +1,5 @@
 Manifest-Version: 1.2
-Main-Class: test2
+Main-Class: Main
 Created-By: 1.4 (Sun Microsystems Inc.)
+SplashScreen-Image: gw_splash.jpg
 
