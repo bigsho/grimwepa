@@ -393,6 +393,7 @@ public class Methods {
 				break;
 			
 			if (line.substring(0, 5).equals("iface")) {
+				// iface [text]
 				for (int j = 0; j < Gui.cboDrivers.getItemCount(); j++) {
 					if (Gui.cboDrivers.getItemAt(j).equals(line.substring(6))) {
 						Gui.cboDrivers.setSelectedIndex(j);
@@ -400,35 +401,48 @@ public class Methods {
 					}
 				}
 			} else if(line.substring(0, 5).equals("chann")) {
+				// channel #
 				try {
 					Gui.sldChannel.setValue(Integer.parseInt(line.substring(8)));
 				} catch (NumberFormatException nfe) {}
 			} else if (line.substring(0, 5).equals("allch") == true) {
+				// allchan [true/false]
 				if (line.substring(8).equals("true") == true) {
 					Gui.chkChannel.setSelected(true);
 					Gui.sldChannel.setEnabled(false);
 				}
 			} else if (line.substring(0, 5).equals("targe")) {
+				// targettimeout #
 				Gui.txtTargetTimeout.setText(line.substring(14));
 			} else if (line.substring(0, 5).equals("wpati")) {
+				// wpatimeout #
 				Gui.txtWpaTimeout.setText(line.substring(11));
 			} else if (line.substring(0, 5).equals("wepat")) {
-				int wepind = Integer.parseInt(line.substring(10));
+				// wepattack #
+				int wepind = 0;
+				try {
+					wepind = Integer.parseInt(line.substring(10));
+				} catch (NumberFormatException nfe) {}
 				Gui.cboWepAttack.setSelectedIndex(wepind);
 			} else if (line.substring(0, 5).equals("wpawo")) {
+				// wpaword [file]
 				Gui.txtWpaWordlist.setText(line.substring(8)); 
 			} else if (line.substring(0, 5).equals("shown")) {
+				// shown
 				showreadme = false;
 			} else if (line.substring(0, 5).equals("xterm")) {
+				// xterm [true/false]
 				if (line.substring(6).equals("true") == true)
 					Gui.chkHideWin.setSelected(true);
 			} else if (line.substring(0, 5).equals("irate")) {
+				// irate #
 				try {
 					Gui.sldWepInjection.setValue(Integer.parseInt(line.substring(6)));
 				} catch (NumberFormatException nfe) {
 					nfe.printStackTrace();
 				}
 			} else if (line.substring(0, 5).equals("color")) {
+				// color #
 				int index = 0;
 				changeColor = true;
 				try {
@@ -438,6 +452,13 @@ public class Methods {
 				}
 				Gui.cboColors.setSelectedIndex(index);
 				Methods.changeColor(index);
+			} else if (line.substring(0, 5).equals("wpame")) {
+				// wpamethod #
+				try {
+					Gui.cboWpaCrackMethod.setSelectedIndex(Integer.parseInt(line.substring(10)));
+				} catch (NumberFormatException nfe) {
+					nfe.printStackTrace();
+				}
 			}
 			
 		} // end of for-loop through every configuration line
@@ -523,6 +544,7 @@ public class Methods {
 		output += "\nxterm " + 		Gui.chkHideWin.isSelected();
 		output += "\nirate " + 		Gui.sldWepInjection.getValue();
 		output += "\ncolor " + 		Gui.cboColors.getSelectedIndex();
+		output += "\nwpamethod " +  Gui.cboWpaCrackMethod.getSelectedIndex();
 		output += "\nshown"; // only display the README once!
 		output += toStore; // add wordlist settings to the end
 		

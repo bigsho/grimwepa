@@ -104,7 +104,14 @@ public class threadTargetScan implements Runnable {
 					break;
 			}
 			
+			// get index of selected target
 			int selected = Gui.tabTargets.getSelectedRow();
+			String last_bssid = "";
+			// if target is actually selected...
+			if (selected >= 0) {
+				// remember the bssid of who was selected
+				last_bssid = (String)Gui.tabTargets.getValueAt(selected, 4);
+			}
 			
 			// clear targets list in preparation for new ones
 			Gui.dtmTargets.setRowCount(0);
@@ -122,21 +129,27 @@ public class threadTargetScan implements Runnable {
 			
 			// read every line of the targets-01.csv airodump file
 			for (int i = 0; i < lines.length; i++) {
-				String line = lines[i];
+				String line = lines[i]; // current line
+				
 				if (hitClients == true) {
-					// we're into the clients...
-					tempArr = line.split(",");
+					// we're now into the clients...
+					
+					tempArr = line.split(","); // it's a CSV, split by comma's
+					
 					if (tempArr.length >= 4) {
 						tempArr[5] = tempArr[5].trim();
-						
+						// look at the 6th comma-separated item, if it contains ":" then ti's a CLIENT!
 						if (tempArr[5].indexOf(":") >= 0) {
+							// use addClient method from Methods.java to remember this client
 							Methods.addClient(tempArr[5], tempArr[0]);
+							
 							if (Methods.currentBSSID != null && Methods.currentBSSID.equals(tempArr[5])) {
 								Gui.cboWepClients.addItem(tempArr[0]);
 								Gui.cboWpaClients.addItem(tempArr[0]);
 							}
 						}
 					}
+					
 				} else if ((line.indexOf("WEP") >= 0) || (line.indexOf("WPA")) >= 0) {
 					tempArr = line.split(",");
 					if (tempArr.length > 6) {
@@ -153,8 +166,19 @@ public class threadTargetScan implements Runnable {
 				}
 			}
 			
-			if (selected >= 0 && selected < Gui.tabTargets.getRowCount())
-				Gui.tabTargets.setRowSelectionInterval(selected, selected);
+			// re-select the last-selected item, based on BSSID
+			if (!last_bssid.equals("")) {
+				// go through every item in the list looking for that bssid
+				for (int i = 0; i < Gui.tabTargets.getRowCount(); i++) {
+					String cur_bssid = (String)Gui.tabTargets.getValueAt(i, 4);
+					if (cur_bssid.equals(last_bssid)) {
+						// if we found it, select it!
+						Gui.tabTargets.setRowSelectionInterval(i, i);
+						break;
+					}
+				}
+			}
+			
 		} while (Gui.btnTargets.getLabel().equals("refresh targets") == false);
 		
 		pro1.destroy();
