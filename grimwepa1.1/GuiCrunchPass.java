@@ -94,6 +94,12 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 		
 		// if crunch isn't found...
 		if (!Methods.fileExists(txtCrunch.getText() + "/crunch")) {
+			
+			if (Methods.fileExists("/usr/bin/crunch")) {
+				txtCrunch.setText("/usr/bin");
+				return;
+			}
+			
 			// set up options for user to select
 			String options[] = new String[]{
 					"locate crunch myself",
@@ -387,6 +393,8 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 				String crunchPath = txtCrunch.getText().replaceAll(" ", "\\\\ ");
 				String gwPath = Methods.grimwepaPath.replaceAll(" ", "\\\\ ");
 				
+				Methods.extractFile("charset.lst");
+				
 				// using aircrack-ng
 				if (!chkPyrit.isSelected()) {
 					command[0] = "/bin/sh";
@@ -409,7 +417,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 						txtCharPreview.setText(txtCharPreview.getText().replaceAll("\"", "\\\\\""));
 						command[2] += " " + txtCharPreview.getText() + "";
 					} else {
-						command[2] += " -f " + crunchPath + "/charset.lst " +
+						command[2] += " -f " + gwPath+ "/charset.lst " +
 						" " + (String)cboChars.getSelectedItem();
 					}
 					
@@ -439,7 +447,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 						txtCharPreview.setText(txtCharPreview.getText().replaceAll("\"", "\\\\\""));
 						command[2] += " " + txtCharPreview.getText() + "";
 					} else {
-						command[2] += " -f " + crunchPath + "/charset.lst " +
+						command[2] += " -f " + gwPath + "/charset.lst " +
 						" " + (String)cboChars.getSelectedItem();
 					}
 					
@@ -459,7 +467,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 				
 				try {
 					if (Methods.verbose)
-						System.out.println("exec:\t" + command);
+						System.out.println("exec:\t" + command[2]);
 					Methods.proCrack = Runtime.getRuntime().exec(command);
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
@@ -476,6 +484,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 				threadWpaCracker.flag = true;
 				
 				Methods.readExec("killall aircrack-ng");
+				Methods.readExec("rm \"" + Methods.grimwepaPath + "charset.lst\"");
 			}
 		}
 	}

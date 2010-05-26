@@ -58,12 +58,15 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 	/** uninstall button*/
 	public static Button		btnUninstall;
 	
+	/** update button*/
+	public static Button		btnUpdate;
+	
 	/** creates frame, sets properties, builds controls, sets frame visible
 	*/
 	public GuiInstall(String title) {
 		super(title);
 		
-		this.setSize(250, 175);
+		this.setSize(250, 205);
 		this.setFont(new Font("Default", Font.BOLD, 11));
 		
 		Dimension ss = Toolkit.getDefaultToolkit().getScreenSize();
@@ -144,6 +147,11 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		add(btnUninstall);
 		btnUninstall.addActionListener(this);
 		
+		btnUpdate = new Button("check for updates");
+		btnUpdate.setForeground(Color.black);
+		btnUpdate.setBackground(col);
+		add(btnUpdate);
+		btnUpdate.addActionListener(this);
 	}
 	
 	/** event that is called when user clicks a button
@@ -156,6 +164,8 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 			install();
 		} else if (event.getSource() == btnUninstall) {
 			uninstall();
+		} else if (event.getSource() == btnUpdate) {
+			checkUpdates();
 		}
 	}
 	
@@ -251,6 +261,8 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		extractFile("README", dir);
 		// extract default passwordlist to dir
 		extractFile("default_pw.txt", dir);
+		// extract walkthrough guide to dir
+		extractFile("GUIDE", dir);
 		
 		// create link in /usr/bin/
 		Methods.writeFile("/usr/bin/grimwepa", "java -jar \"" + txtPath.getText() + file.getName() + "\" $1 &");
@@ -437,6 +449,76 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/** looks at googlecode's wiki page for grimwepa updates
+	*/
+	public void checkUpdates() {
+		Methods.readExec("rm /tmp/gw-latest");
+		
+		String output[] = Methods.readExec("wget -O /tmp/gw-latest http://code.google.com/p/grimwepa/wiki/Latest");
+		for (int i = 0; i < output.length; i++) {
+			if (output[i].indexOf("failed") >= 0) {
+				JOptionPane.showMessageDialog(
+					null,
+					"unable to access the internet.",
+					"grim wepa | updates",
+					JOptionPane.ERROR_MESSAGE
+				);
+				return;
+			}
+		}
+		
+		if (!Methods.fileExists("/tmp/gw-latest")) {
+			JOptionPane.showMessageDialog(
+				null,
+				"error occurred. unable to retrieve update.",
+				"grim wepa | updates",
+				JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
+		
+		String ver = "", url = "";
+		
+		output = Methods.readFile("/tmp/gw-latest");
+		for (int i = 0; i < output.length; i++) {
+			if (output[i].indexOf("latest version is -") >= 0 && output[i].indexOf(".jar- ") >= 0)
+				ver = output[i].substring(output[i].indexOf(" is -") + 5, output[i].indexOf(".jar- ") + 4);
+			if (output[i].indexOf("download from here <a href=\"") >= 0 && output[i].indexOf(".jar\"") >= 0)
+				url = output[i].substring(output[i].indexOf(" from here <a href=\"") + 20, output[i].indexOf(".jar\"") + 4);
+			if (!ver.equals("") && !url.equals(""))
+				break;
+		}
+		
+		if (ver.compareTo(Main.VERSION) > 0) {
+			// newest version > this version, need to update
+			if (JOptionPane.showConfirmDialog(
+					null,
+					"a new version, " + ver + ", is available for download.\n\n" +
+					"do you want to download and run the newest version?",
+					"grim wepa | update",
+					JOptionPane.YES_NO_OPTION
+				) == JOptionPane.NO_OPTION) {
+				return;
+			}
+			
+			Methods.readExec("rm " + ver);
+			Methods.readExec("wget -O " + Methods.grimwepaPath.replaceAll(" ", "\\\\ ") + ver + " " + url);
+			
+			try {
+				Runtime.getRuntime().exec("java -jar " + ver);
+			} catch (IOException ioe) {}
+			System.exit(0);
+		} else {
+			JOptionPane.showMessageDialog(
+				null,
+				"this version of grim wepa is the newest version.\n" +
+				"you are up to date.",
+				"grim wepa | update",
+				JOptionPane.INFORMATION_MESSAGE
+			);
 		}
 	}
 	
