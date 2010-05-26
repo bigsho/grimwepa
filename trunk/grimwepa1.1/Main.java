@@ -11,7 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+
 public class Main {
+	/** program version, for updating purposes */
+	public static final String VERSION = "grimwepa1.10a4.jar";
+	
 	/** main program window*/
 	public static Gui guiWindow;
 	

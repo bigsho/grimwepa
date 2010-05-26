@@ -8,7 +8,7 @@ if [[ $? -eq 0  ]]
 then
     echo "compiled successfully"
 	echo "building jar file..."
-    jar cvfm grimwepa1.10a4.jar mymanifest *.class default_pw.txt README grimwepa.xpm gw_splash.jpg >> /dev/null
+    jar cvfm grimwepa1.10a4.jar mymanifest *.class default_pw.txt README grimwepa.xpm gw_splash.jpg charset.lst GUIDE >> /dev/null
 	echo "executing..."
 	echo ""
     java -jar grimwepa1.10a4.jar $1

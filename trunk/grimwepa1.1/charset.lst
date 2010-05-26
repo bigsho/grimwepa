@@ -1,0 +1,33 @@
+# charset configuration file for winrtgen v1.2 by Massimiliano Montoro (mao@oxid.it)
+# compatible with rainbowcrack 1.1 and later by Zhu Shuanglei <shuanglei@hotmail.com>
+# Original modified by Ramius Kahn to allow for German and Danish special characters <Ramius@RainbowTables.net>
+
+numeric                     	= [0123456789]
+numeric-space               	= [0123456789 ]
+
+ualpha                       	= [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+ualpha-space                 	= [ABCDEFGHIJKLMNOPQRSTUVWXYZ ]
+ualpha-numeric               	= [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
+ualpha-numeric-space         	= [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ]
+ualpha-numeric-symbol14       = [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=]
+ualpha-numeric-symbol14-space = [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+= ]
+ualpha-numeric-all       	= [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/]
+ualpha-numeric-all-space      = [ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/ ]
+
+lalpha                  	= [abcdefghijklmnopqrstuvwxyz]
+lalpha-space            	= [abcdefghijklmnopqrstuvwxyz ]
+lalpha-numeric          	= [abcdefghijklmnopqrstuvwxyz0123456789]
+lalpha-numeric-space    	= [abcdefghijklmnopqrstuvwxyz0123456789 ]
+lalpha-numeric-symbol14 	= [abcdefghijklmnopqrstuvwxyzäöüß0123456789!@#$%^&*()-_+="]
+lalpha-numeric-symbol14-space = [abcdefghijklmnopqrstuvwxyzäöüß0123456789!@#$%^&*()-_+=" ]
+lalpha-numeric-all 	    	= [abcdefghijklmnopqrstuvwxyzäöüß0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/]
+lalpha-numeric-all-space	= [abcdefghijklmnopqrstuvwxyzäöüß0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/ ]
+
+mixalpha                    	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]
+mixalpha-space              	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ]
+mixalpha-numeric            	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]
+mixalpha-numeric-space      	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ]
+mixalpha-numeric-symbol14   	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=]
+mixalpha-numeric-symbol14-space = [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+= ]
+mixalpha-numeric-all        	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/]
+mixalpha-numeric-all-space  	= [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=~`[]{}|\:;"'<>,.?/ ]

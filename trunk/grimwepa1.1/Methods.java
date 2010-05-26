@@ -467,6 +467,7 @@ public class Methods {
 		if (showreadme == true) {
 			// put the README and grimstall.sh in the working directory
 			extractFile("README");
+			extractFile("GUIDE");
 			
 			checkCompatibility();
 		}
@@ -510,6 +511,8 @@ public class Methods {
 				"grim wepa | system errors",
 				JOptionPane.ERROR_MESSAGE
 			);
+			extractFile("README");
+			extractFile("GUIDE");
 			return false;
 		}
 		
