@@ -4,13 +4,13 @@
 = Alpha Testers Needed! =
 
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
-[http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar]
+[http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar]
 
 You can copy/paste this code into a console window to download and run the latest release:
 
 {{{
-wget http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar
-java -jar grimwepa1.10a3.jar
+wget http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar
+java -jar grimwepa1.10a4.jar
 }}}
 
 This version (and future versions) will contain an installer within the program; so there is no longer a need for a 'grimstall.sh' script.
@@ -52,7 +52,7 @@ they are found -- Just make sure there's a link in /usr/bin/
 = What's new in v1.10 =
 	* splash screen
 	* checks required/recommended apps at first load
-	* checks os and if user is signed in as root on every load
+	* checks OS and if user is signed in as root on every load
 	* install (and uninstall) from inside the app
 		* default install directory: /pentest/wireless/grimwepa/
 		* creates link in /usr/bin/
@@ -81,6 +81,24 @@ they are found -- Just make sure there's a link in /usr/bin/
 		* converts hex to ascii when applicable
 		* signs onto WEP and WPA1 encrypted access points using iwconfig
 
+
+=== New in v1.10 alpha 4 ===
+	* auto-signon checkbox for both WEP and WPA -- signs onto access point if/when key is compromised.
+	* fixed signon for WPA (now handles WPA1, WPA2, and WPA1+2)
+		* NOTE: uses iwlist to figure out encryption of access point
+	* new WEP attack: 'passive capture'
+		* does not attempt any fake-auth or any aireplay-ng attacks
+		* listens to a network passively (non-intrusively).
+		* useful when network is already generating lots of traffic (streaming, netflix, torrents, etc)
+	* 'download wordlist' option for wordlist generator
+		* user selects which files to download (8 total)
+		* downloads from google-code page and stores in ::grimwepapath::/wordlists/
+	* refreshing targets doesn't deselect access point (small fix)
+	* included GUIDE (walk-through for beginners), it is extracted during installation
+	* 'update' to latest version button, seen in the installer window. 
+		* NOTE: (won't work until there's an alpha 5 released)
+
+
 === New in v1.10 alpha 3 ===
 	* fixed injection test for WEP-based attacks.
 	* added 'verbose' mode for debugging.
@@ -88,7 +106,7 @@ they are found -- Just make sure there's a link in /usr/bin/
 		* also prints (some of) the system's response to commands.
 		* useful, so testers can copy/paste commands and see what is going wrong.
 		* to use, add -v argument when executing grimwepa, for example:
-			* java -jar grimwepa1.10b3.jar -v
+			* java -jar grimwepa1.10a3.jar -v
 			* grimwepa -v
 
 
