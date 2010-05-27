@@ -1,5 +1,5 @@
 #summary latest version of grim wepa
 #labels Deprecated
 
-latest version is -grimwepa1.10a3.jar-
-download from here http://grimwepa.googlecode.com/files/grimwepa1.10a3.jar
+latest version is -grimwepa1.10a5.jar-
+download from here http://grimwepa.googlecode.com/files/grimwepa1.10a5.jar
