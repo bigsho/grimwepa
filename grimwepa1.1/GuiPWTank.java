@@ -314,7 +314,7 @@ public class GuiPWTank extends Frame implements WindowListener, ActionListener, 
 		stat("entering wireless settings...");
 		exec("iwconfig " + driver + " mode Managed");
 		exec("iwconfig " + driver + " essid \"" + ssid + "\"");
-		exec("iwconfig " + driver + " key " + key + "\"");
+		exec("iwconfig " + driver + " key " + key + "");
 		
 		stat("putting device up...");
 		exec("ifconfig " + driver + " up");
@@ -327,8 +327,8 @@ public class GuiPWTank extends Frame implements WindowListener, ActionListener, 
 				" -bg black" +
 				" -geom 100x15+0+0" + 
 				" -T gw-dhclient" +
-				" -e " + 
-				"dhclient " + driver + ""
+				" -e" + 
+				" dhclient " + driver + ""
 		);
 		
 		// assume the worst

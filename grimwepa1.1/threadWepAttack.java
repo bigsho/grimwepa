@@ -4,6 +4,8 @@
 
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class threadWepAttack implements Runnable {
 	/** wep attack thread*/
@@ -11,18 +13,20 @@ public class threadWepAttack implements Runnable {
 	
 	/** flag to let this and other classes know when we want to stop attacking/cracking*/
 	public static boolean stopFlag;
+	
 	/** flag, only true when user or program has already started cracking
 		value is retrieved during the 'auto-crack-at-10k-IVS' check
 		@see #showIVS()*/
 	public static boolean started_autocrack = false;
+	
 	/** attack process, used for aireplay-ng attacks*/
 	public static Process proAttack = null;
+	
 	/** wpa_supplicant process, used for intel4965 workaround
 		@see #intel4965Check() */
 	public static Process proIntel;
 	
-	/** creates a new thread
-	*/
+	/** creates a new thread */
 	public threadWepAttack() {
 		t = new Thread(this, "threadWepAttack");
 		stopFlag = false;
@@ -86,7 +90,7 @@ public class threadWepAttack implements Runnable {
 					" --output-format csv" + 
 					" " + (String)Gui.cboDrivers.getSelectedItem();
 		
-		// proAttack is the process that is running the airodump capture
+		// Methods.proAttack is the process that is running the airodump capture
 		try {
 			if (Methods.verbose)
 				System.out.println("exec:\t" + command.replace("!PATH!", Methods.grimwepaPath));
@@ -100,6 +104,8 @@ public class threadWepAttack implements Runnable {
 		if (client.equals("") && Gui.cboWepAttack.getSelectedIndex() != 6) {
 			// no client to spoof, not doing passive capture; need to fake-authenticate!
 			Methods.stat("attempting fake-authentication with access point...");
+			
+			Methods.pause(1);
 			
 			// start fake-auth
 			output = Methods.readExec("aireplay-ng -1 0 -a " + Methods.currentBSSID + " -T 1 " + driver);
@@ -184,15 +190,13 @@ public class threadWepAttack implements Runnable {
 			Gui.setEnable(true);
 			Gui.btnWepAttack.setLabel("start attack");
 			Gui.btnWepDeauth.setEnabled(false);
-			// kill airodump-ng processes
-			try {
-				proAttack.destroy();
-			} catch (IllegalStateException ise) {
-			} catch (NullPointerException npe) {}
+			
+			// kill airodump-ng process
 			try {
 				Methods.proAttack.destroy();
 			} catch (IllegalStateException ise) {
 			} catch (NullPointerException npe) {}
+			
 			// remove dump files
 			Methods.removeFile("wep-01.cap");
 			Methods.removeFile("wep-01.csv");
@@ -206,8 +210,6 @@ public class threadWepAttack implements Runnable {
 		
 		switch (Gui.cboWepAttack.getSelectedIndex()) {
 		case 1: // arp-replay attack
-			deleteReplay();
-			
 			Methods.stat("running arp-replay attack, auto-crack at 10k ivs");
 			command = "";
 			if (!Gui.chkHideWin.isSelected())
@@ -248,23 +250,61 @@ public class threadWepAttack implements Runnable {
 		case 2: // chopchop attack
 		case 3: // fragmentation attack
 			// chopchop and fragmentation commands are the exact same, except for -4 and -5
-			Methods.readExec("rm arprequest");
-			deleteFragment();
-			
 			String keystream = "";
 			
 			String chopfrag = (Gui.cboWepAttack.getSelectedIndex() == 2 ? "chop-chop" : "fragmentation");
-			if (!stopFlag)
-				Methods.stat("starting " + chopfrag + " attack...");
+			Methods.stat("starting " + chopfrag + " attack...");
 			
-			while ( (stopFlag == false) && (keystream.equals("") == true) ) {
+			while ( (!stopFlag) && (keystream.equals("")) ) {
 				command = "aireplay-ng -" + (chopfrag.equals("chop-chop") ? "4" : "5") + "" + client + 
 										" -b " + Methods.currentBSSID + 
 										" -x " + Gui.sldWepInjection.getValue() +
 										" -F " + driver;
 				
-				Methods.stat("waiting for data packets...");
+				Methods.stat("waiting for a data packet...");
+				Methods.readExec("killall aireplay-ng");
+				
+				//  begin new
+				BufferedReader res1 = null;
+				try {
+					proAttack = Runtime.getRuntime().exec(command);
+				} catch (IOException ioe) {}
+				res1 = new BufferedReader(new InputStreamReader(proAttack.getInputStream()));
+				
+				int exitVal = -1;
+				do {
+					try {
+						exitVal = proAttack.exitValue();
+					} catch (IllegalThreadStateException itse) {}
+					
+					Methods.pause (1);
+					showIVS();
+				} while (!stopFlag && exitVal != -1);
+				// end new
+				
+				if (!stopFlag) {
+					// process ended!
+					String line;
+					try {
+						while ( (line = res1.readLine()) != null) {
+							if (Methods.verbose && !line.trim().equals(""))
+								System.out.println("\t" + line);
+							if (line.indexOf("Saving keystream in") >= 0) {
+								// this contains the keystream!
+								keystream = line.substring(20);
+								break;
+							} else if (line.indexOf("Failure: ") >= 0) {
+								stopFlag = true;
+								Methods.stat(chopfrag + " attack failed; try another attack instead.");
+								break;
+							}
+						}
+					} catch (IOException ioe) {}
+				}
+				
+				/* begin old
 				output = Methods.readExec(command);
+				Methods.readExec("killall aireplay-ng");
 				
 				for (int i = 0; i < output.length; i++) {
 					if (output[i].indexOf("Saving keystream in") >= 0) {
@@ -276,11 +316,11 @@ public class threadWepAttack implements Runnable {
 						Methods.stat(chopfrag + " attack failed; try another attack instead.");
 						break;
 					}
-				}
+				}end old*/
 			}
 			
 			// if we have a keystream, we need to build the arp
-			if (keystream.equals("") == false) {
+			if (!keystream.equals("")) {
 				// if keystream != "", then we have a keystream! to the batmobile!
 				Methods.stat("keystream found; building arp packet...");
 				String mymac = Methods.getMac(driver);
@@ -339,7 +379,6 @@ public class threadWepAttack implements Runnable {
 					showIVS();
 				} while (!stopFlag);
 				
-				proAttack.destroy();
 			} else {
 				// must have been stopped
 				// Methods.stat(chopfrag + " attack stopped");
@@ -431,34 +470,41 @@ public class threadWepAttack implements Runnable {
 			break;
 		} // end of different attacks switch statement
 		
+		
 		if (proIntel != null) {
 			proIntel.destroy(); // kill wpa_supplicant if it's running
 			proIntel = null;
 		}
+		
 		// delete the fake.conf file, too, just in case
 		Methods.removeFile("fake.conf");
-		
-		// get rid of those damn replay_ packets
-		deleteReplay();
 		
 		Gui.setEnable(true);
 		Gui.btnWepAttack.setLabel("start attack");
 		Gui.btnWepDeauth.setEnabled(false);
 		
+		// stop aireplay
 		try {
 			proAttack.destroy();
 		} catch (IllegalStateException ise) {
 		} catch (NullPointerException npe) {}
 		
+		// stop airodump
 		try {
 			Methods.proAttack.destroy();
 		} catch (IllegalStateException ise) {
 		} catch (NullPointerException npe) {}
 		
+		// kill all aireplay's
+		Methods.readExec("killall aireplay-ng");
+		
 		// if we changed the mac.. change it back
-		if (oldMac.equals("") == false) {
+		if (!oldMac.equals("")) {
 			Methods.changeMac(driver, oldMac);
 		}
+		
+		// get rid of those damn replay_ packets
+		deleteReplay();
 		
 		// get rid of airodump files fragment- files
 		deleteFragment();

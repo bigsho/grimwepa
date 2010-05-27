@@ -1,5 +1,8 @@
 GRIM WEPA v1.10 CHANGELOG
 
+TODO:	upgrade aircrack-ng  and other apps at the install screen
+		
+
 WHAT'S NEW (BIG CHANGES)
 ========================
 
@@ -60,6 +63,14 @@ WHAT'S NEW (BIG CHANGES)
 
 SMALL CHANGES
 
+v1.10 alpha 5 fixes
+-------------------
+	- fixed wpa dictionary attack error : 
+		- attempted to open "xterm-fg", not just 'xterm'. whoops!
+		- spaces in directory/file would cause attack to stop
+	- fixed aireplay-ng zombie process for WEP attacks
+
+
 v1.10 alpha 4 fixes / updates
 -----------------------------
 	- auto-signon checkbox for wep and wpa cracking attacks
@@ -74,6 +85,7 @@ v1.10 alpha 4 fixes / updates
 		- downloads from googlecode page and stores in ::grimwepapath::/wordlists/
 	- refreshing targets doesn't lose selected access point (small fix)
 	- included GUIDE (walkthrough for beginners)
+	- 'update' to latest version
 
 v1.10 alpha 3 fixes / updates
 -----------------------------
