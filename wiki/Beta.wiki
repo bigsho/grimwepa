@@ -4,13 +4,13 @@
 = Alpha Testers Needed! =
 
 If you want to help test and make Grim Wepa better (beta), then download the latest release from here:
-[http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar]
+[http://grimwepa.googlecode.com/files/grimwepa1.10a5.jar http://grimwepa.googlecode.com/files/grimwepa1.10a5.jar]
 
 You can copy/paste this code into a console window to download and run the latest release:
 
 {{{
-wget http://grimwepa.googlecode.com/files/grimwepa1.10a4.jar
-java -jar grimwepa1.10a4.jar
+wget http://grimwepa.googlecode.com/files/grimwepa1.10a5.jar
+java -jar grimwepa1.10a5.jar
 }}}
 
 This version (and future versions) will contain an installer within the program; so there is no longer a need for a 'grimstall.sh' script.
