@@ -203,8 +203,8 @@ public class Methods {
 	*/
 	public static void setEnableWPA(boolean en) {
 		Gui.panWpa.setEnabled(en);
-		// Gui.btnWpaCrack.setEnabled(en);
-		// Gui.cboWpaCrackMethod.setEnabled(en);
+		Gui.btnWpaCrack.setEnabled(en);
+		Gui.cboWpaCrackMethod.setEnabled(en);
 		Gui.btnWpaCrack.setEnabled(false);
 		Gui.cboWpaCrackMethod.setEnabled(false);
 		Gui.chkWpaSignon.setEnabled(false);
@@ -1047,13 +1047,14 @@ public class Methods {
 			
 			command +=	"aircrack-ng" +
 						" -a 1" +
-						" -b " + currentBSSID + 
+						" -b " + currentBSSID +
 						" -l !PATH!wepcracked.txt" +
 						" !PATH!wep-01.ivs";
 			
+			if (verbose)
+				System.out.println("exec:\t" + command.replaceAll("!PATH!", grimwepaPath));
+			
 			try {
-				if (verbose)
-					System.out.println("exec:\t" + command.replaceAll("!PATH!", grimwepaPath));
 				proCrack = Runtime.getRuntime().exec(fixArgumentsPath(command));
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
@@ -1152,31 +1153,32 @@ public class Methods {
 			Gui.setEnable(false);
 			Gui.btnWpaDeauth.setEnabled(true);
 			
+			// remove old wpa capture file
+			Methods.removeFile("wpa-01.cap");
+			Methods.removeFile("wpa-01.csv");
+			Methods.removeFile("wpa-01.kismet.csv");
+			Methods.removeFile("wpa-01.kismet.netxml");
+			
+			String command = "";
+			if (!Gui.chkHideWin.isSelected()) {
+				command = 	"xterm" +
+							" -fg " + (String)Gui.cboColors.getSelectedItem() + 
+							" -bg black" +
+							" -T gw-wpacapture" +
+							" -geom 100x15+0+0 -e ";
+			}
+			
+			command +=  "airodump-ng" +
+						" -w !PATH!wpa" +
+						" --bssid " + Methods.currentBSSID +
+						" -c " + Methods.currentChannel +
+						" " + (String)Gui.cboDrivers.getSelectedItem();
+			
+			// run airodump, saved to a pcap file, targetting the bssid/channel
+			if (verbose)
+				System.out.println("exec:\t" + command.replaceAll("!PATH!", grimwepaPath));
+			
 			try {
-				// remove old wpa capture file
-				Methods.removeFile("wpa-01.cap");
-				Methods.removeFile("wpa-01.csv");
-				Methods.removeFile("wpa-01.kismet.csv");
-				Methods.removeFile("wpa-01.kismet.netxml");
-				
-				String command = "";
-				if (!Gui.chkHideWin.isSelected()) {
-					command = 	"xterm" +
-					 			" -fg " + (String)Gui.cboColors.getSelectedItem() + 
-								" -bg black" +
-								" -T gw-wpacapture" +
-								" -geom 100x15+0+0 -e ";
-				}
-				
-				command +=  "airodump-ng" +
-							" -w !PATH!wpa" +
-							" --bssid " + Methods.currentBSSID +
-							" -c " + Methods.currentChannel +
-							" " + (String)Gui.cboDrivers.getSelectedItem();
-				
-				// run airodump, saved to a pcap file, targetting the bssid/channel
-				if (verbose)
-					System.out.println("exec:\t" + command.replaceAll("!PATH!", grimwepaPath));
 				proAttack = Runtime.getRuntime().exec(fixArgumentsPath(command));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -1247,7 +1249,7 @@ public class Methods {
 			
 			if (!Gui.chkHideWin.isSelected()) {
 				commandArr[2] = "xterm" +
-								"-fg " + (String)Gui.cboColors.getSelectedItem() + 
+								" -fg " + (String)Gui.cboColors.getSelectedItem() + 
 								" -bg black" +
 								" -T gw-wpacrack" +
 								" -geom 80x20+0+0 -e ";
@@ -1452,7 +1454,7 @@ public class Methods {
 		stat("entering wireless settings...");
 		readExec("iwconfig " + driver + " mode Managed");
 		readExec("iwconfig " + driver + " essid \"" + ssid + "\"");
-		readExec("iwconfig " + driver + " key " + hexkey + "\"");
+		readExec("iwconfig " + driver + " key " + hexkey + "");
 		
 		stat("bringing device " + driver + " up...");
 		readExec("ifconfig " + driver + " up");

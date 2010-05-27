@@ -116,6 +116,10 @@ public class threadWpaListener implements Runnable {
 			// no handshake was captured, user hit stop
 			Methods.stat("inactive");
 			
+			Gui.btnWpaCrack.setEnabled(false);
+			Gui.cboWpaCrackMethod.setEnabled(false);
+			Gui.chkWpaSignon.setEnabled(false);
+			
 			// delete it! (aka cap file)
 			Methods.removeFile("wpa-01.cap");
 			Methods.removeFile("wpa-01.csv");
