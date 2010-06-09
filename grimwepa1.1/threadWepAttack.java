@@ -558,17 +558,27 @@ public class threadWepAttack implements Runnable {
 	private static void showIVS() {
 		// looks at airodump's CSV file for number of IVS collected
 		// also, if # is greater than 10,000, and we haven't started cracking yet.. it starts cracking!
-		if (!Methods.fileExists("wep-01.csv"))
+		if (Methods.verbose)
+			System.out.println("Methods.fileExists(Methods.grimwepaPath + 'wep-01.csv') = " + 
+						Methods.fileExists(Methods.grimwepaPath + "wep-01.csv"));
+		
+		if (!Methods.fileExists(Methods.grimwepaPath + "wep-01.csv"))
 			return;
 		
-		String ivs = "", output[] = Methods.readFile("wep-01.csv");
+		String ivs = "", output[] = Methods.readFile(Methods.grimwepaPath + "wep-01.csv");
 		
 		for (int i = 0; i < output.length; i++) {
+			if (Methods.verbose)
+				System.out.println("Line " + (i + 1) + ": " + output[i]);
+			
 			if ((output[i].indexOf(Methods.currentBSSID) >= 0) && (output[i].indexOf("WEP") >= 0 )) {
 				String arr[] = output[i].split(", ");
 				ivs = arr[10].replace(" ", "");
 			}
 		}
+		if (Methods.verbose)
+			System.out.println("ivs = \"" + ivs + "\"");
+		
 		if (ivs.equals(""))
 			ivs = "0";
 		int count = 0;

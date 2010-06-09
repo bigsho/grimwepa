@@ -104,14 +104,17 @@ public class threadTargetScan implements Runnable {
 					break;
 			}
 			
-			// get index of selected target
-			int selected = Gui.tabTargets.getSelectedRow();
+			int selected = -1;
 			String last_bssid = "";
-			// if target is actually selected...
-			if (selected >= 0) {
-				// remember the bssid of who was selected
-				last_bssid = (String)Gui.tabTargets.getValueAt(selected, 4);
-			}
+			// get index of selected target
+			try {
+				selected = Gui.tabTargets.getSelectedRow();
+				// if target is actually selected...
+				if (selected >= 0) {
+					// remember the bssid of who was selected
+					last_bssid = (String)Gui.tabTargets.getValueAt(selected, 4);
+				}
+			} catch (NullPointerException npe) {}
 			
 			// clear targets list in preparation for new ones
 			Gui.dtmTargets.setRowCount(0);

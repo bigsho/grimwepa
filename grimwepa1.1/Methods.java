@@ -632,9 +632,8 @@ public class Methods {
 	*/
 	public static void extractFile(String filename) {
 		try {
-			String home = grimwepaPath; /*  getClass().getProtectionDomain()
-                   							getCodeSource().getLocation()
-                      						getPath().replaceAll("%20", " ");*/
+			String home = grimwepaPath + Main.VERSION;
+			
 			JarFile jar = new JarFile(home);
 			ZipEntry entry = jar.getEntry(filename);
 			File efile = new File(grimwepaPath, entry.getName());
@@ -654,7 +653,7 @@ public class Methods {
 			in.close();
 		}
 		catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	

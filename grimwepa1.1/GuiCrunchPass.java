@@ -417,7 +417,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 						txtCharPreview.setText(txtCharPreview.getText().replaceAll("\"", "\\\\\""));
 						command[2] += " " + txtCharPreview.getText() + "";
 					} else {
-						command[2] += " -f " + gwPath+ "/charset.lst " +
+						command[2] += " -f " + gwPath+ "charset.lst " +
 						" " + (String)cboChars.getSelectedItem();
 					}
 					
@@ -429,7 +429,7 @@ public class GuiCrunchPass extends Frame implements WindowListener, ActionListen
 									" -w-" +
 									" -l " + gwPath + "wpacracked.txt" +
 									" -b " + Methods.currentBSSID +
-									" " + txtCap.getText() + "\"";
+									" " + (String)(txtCap.getText()).replaceAll(" ", "\\\\ ") + "\"";
 				
 				// using pyrit
 				} else {

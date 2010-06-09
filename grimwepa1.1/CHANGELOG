@@ -1,9 +1,10 @@
 GRIM WEPA v1.10 CHANGELOG
 
-TODO:	upgrade aircrack-ng  and other apps at the install screen
-		
+TODO:	- download/install required packages at start, 
+		  instead of telling the user to install it themself.
 
-WHAT'S NEW (BIG CHANGES)
+
+WHAT'S NEW (BIG CHANGES in v1.10)
 ========================
 
 	splash/load screen.
@@ -15,6 +16,7 @@ WHAT'S NEW (BIG CHANGES)
 		- optional: create menu shortcut 
 			- backtrack > radio network analysis > 80211 > cracking
 		- update to newer versions of grim wepa when they are released
+		- update to newer version of aircrack-ng and pyrit automatically
 	
 	WEP & WPA
 	---------
@@ -31,10 +33,10 @@ WHAT'S NEW (BIG CHANGES)
 	
 	WEP
 	---------
-	new WEP capture method: passive capture:
+	new WEP capture method, "passive capture":
 		- uses no aireplay-ng attacks, waits for data.
 		- only useful when targetting a busy network (streaming media, torrents, etc)
-	fixed injection test.
+	fixed injection test. (hopefully)
 	
 	WPA	
 	---------
@@ -47,21 +49,29 @@ WHAT'S NEW (BIG CHANGES)
 	handshake gets stripped from the cap file by pyrit or tshark.
 	all handshakes are backed up to ::grimwepaPath::/hs/ ...
 		- removes spaces/non-alpha-numeric chars from name, stores it as that name.cap
-		- for example: ssid "Netgear! 5831" would be stored as "Netgear5831.cap"
+		- for example: ssid "Netgear-5831!" would be stored as "Netgear5831.cap"
 	
 	OTHER
 	---------
 	verbose mode; outputs all executed commands to stdout
 		- designed for debugging
 		- start program with -v as an argument:
-			- ex: "grimwepa -v" or "java -jar grimwepa1.10a3.jar -v"
+			- ex: "grimwepa -v" or "java -jar grimwepa1.10a5.jar -v"
 
 
 
 =========================================================
 
 
-SMALL CHANGES
+DETAILED (small) CHANGES
+
+v1.10 alpha 6 fixes
+-------------------
+	- fixed crunch passthrough error: directories with spaces now work
+	- fixed installer; works with spaces in install path
+	- fixed '0 captured ivs' bug (for installed versions)
+	- 'check for updates' also checks aircrack-ng and pyrit
+		- installs aircrack-ng 1.1 or pyrit 0.3.0 if an older version is found on the user's computer.
 
 v1.10 alpha 5 fixes
 -------------------
@@ -69,7 +79,6 @@ v1.10 alpha 5 fixes
 		- attempted to open "xterm-fg", not just 'xterm'. whoops!
 		- spaces in directory/file would cause attack to stop
 	- fixed aireplay-ng zombie process for WEP attacks
-
 
 v1.10 alpha 4 fixes / updates
 -----------------------------
