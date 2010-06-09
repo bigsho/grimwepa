@@ -1,15 +1,15 @@
 grim wepa
 
-date:	may 19, 2010
+date:	may 24, 2010
 auth:	derv82 at gmail
 site:	grimwepa.googlecode.com
 lang:	java
-ver:	1.10 alpha 4
+ver:	1.10 alpha 6
 
 intended for use with Backtrack 4 linux distribution
 
 execution:
-	java -jar grimwepa1.10a4.jar [options]
+	java -jar grimwepa1.10a6.jar [options]
 
 options:
 	-v, --verbose		outputs executed commands to stdout

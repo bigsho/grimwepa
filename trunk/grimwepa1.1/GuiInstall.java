@@ -12,6 +12,8 @@ import javax.swing.event.*;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.*;
 
+import java.util.Scanner;
+
 // IO libraries
 import java.io.File;
 import java.io.FileReader;
@@ -201,49 +203,35 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		// true if directory has space in it, false if not
 		boolean space = (dir.indexOf(" ") >= 0);
 		
-		String temp = "";
+		String temp = dir;
 		
-		Methods.readExec("rm -rf /tmp/grimwepa/");
+		exec(new String[] {"rm", "-rf", "/tmp/grimwepa/"});
 		
-		Methods.readExec("mkdir /tmp/grimwepa/");
+		exec(new String[] {"mkdir", "/tmp/grimwepa/"});
 		
 		// back up old pass.txt
 		if (Methods.fileExists(dir + "pass.txt")) {
-			temp = dir + "pass.txt";
-			if (space)
-				temp = "\"" + temp + "\"";
-			
-			Methods.readExec("mv " + temp + " /tmp/grimwepa/");
+			exec(new String[] {"mv", temp + "pass.txt", "/tmp/grimwepa/"});
 		}
 		
 		// backup handshakes
-		temp = dir + "hs/";
-		if (space)
-			temp = "\"" + temp + "\"";
-		Methods.readExec("mv " + temp + " /tmp/grimwepa/");
+		exec(new String[] {"mv", temp + "hs/", "/tmp/grimwepa/"});
 		
 		// delete the directory
-		temp = dir + "*";
-		if (space)
-			temp = "\"" + temp + "\"";
-		Methods.readExec("rm -rf " + temp);
+		exec(new String[] {"rm", "-rf", temp + "*"});
+		exec(new String[] {"rm", "-rf", dir});
 		
-		temp = dir;
-		if (space)
-			temp = "\"" + temp + "\"";
-		Methods.readExec("rm -rf " + dir);
-		
-		// create the directories
-		Methods.readExec("mkdir " + temp);
+		// create the directory
+		exec(new String[] {"mkdir", temp});
 		
 		// copy back pass.txt
-		Methods.readExec("mv /tmp/grimwepa/pass.txt " + temp);
+		exec(new String[] {"mv", "/tmp/grimwepa/pass.txt", temp});
 		
 		// copy back handshakes
-		Methods.readExec("mv /tmp/grimwepa/hs/ " + temp);
+		exec(new String[] {"mv", "/tmp/grimwepa/hs/ " + temp});
 		
 		// delete temp folder
-		Methods.readExec("rm -rf /tmp/grimwepa/");
+		exec(new String[] {"rm", "-rf", "/tmp/grimwepa/"});
 		
 		// get jar file location
 		File file = null;
@@ -253,9 +241,7 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		
 		// copy jar file to install dir
 		String temp2 = file.getPath();
-		if (temp2.indexOf(" ") >= 0)
-			temp2 = "\"" + temp2 + "\"";
-		Methods.readExec("cp -f " + temp2 + " " + temp);
+		exec(new String[] {"cp", "-f", temp2, temp});
 		
 		// extract readme to dir
 		extractFile("README", dir);
@@ -267,7 +253,7 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		// create link in /usr/bin/
 		Methods.writeFile("/usr/bin/grimwepa", "java -jar \"" + txtPath.getText() + file.getName() + "\" $1 &");
 		// change permissions on linked file
-		Methods.readExec("chmod 755 /usr/bin/grimwepa");
+		exec(new String[] {"chmod", "755", "/usr/bin/grimwepa"});
 		
 		// generate text for desktop shortcut
 		String s = "";
@@ -301,7 +287,7 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		// if we're installing to desktop or menu... make an icon and update the menus
 		if (chkDesktop.isSelected() || chkMenu.isSelected()) {
 			extractFile("grimwepa.xpm", "/usr/share/pixmaps/");
-			Methods.readExec("update-menus");
+			exec(new String[] {"update-menus"});
 		}
 		
 		JOptionPane.showMessageDialog(
@@ -313,6 +299,48 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		
 		// hide the window, show the main window
 		cancel();
+	}
+	
+	/** executes a string array
+		similar to Methods.readExec(), but made for the install() method
+		@param command commands to execute
+		@return output of command
+		@see #install
+	*/
+	public String[] exec(String[] command) {
+		if (Methods.verbose)
+			System.out.println(command);
+		
+		String all = "";
+		
+		Process pro = null;
+		BufferedReader res1;
+		try {
+			pro = Runtime.getRuntime().exec(command);
+			res1 = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+			pro.waitFor();
+			
+			String line;
+			while ( (line = res1.readLine()) != null) {
+				if (Methods.verbose && !line.trim().equals(""))
+					System.out.println("\t" + line);
+				all = all + line + "|||||";
+			}
+			if (all.length() >= 5) {
+				if (all.substring(all.length() - 5).equals("|||||"))
+					all = all.substring(0, all.length() - 5);
+			}
+			
+			pro.destroy();
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		
+		pro.destroy();
+		
+		return all.split("\\|\\|\\|\\|\\|");
 	}
 	
 	/** uninstalls program (deletes working directory, desktop/menu items)
@@ -352,8 +380,8 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		Methods.readExec("rm /usr/share/applications/grimwepa.desktop");
 		Methods.readExec("rm /root/grimwepa.desktop");
 		
-		Methods.readExec("rm -rf " + dir + "*");
-		Methods.readExec("rm -rf " + dir);
+		exec(new String[] {"rm", "-rf", dir + "*"});
+		exec(new String[] {"rm", "-rf", dir});
 		
 		JOptionPane.showMessageDialog(
 			null,
@@ -452,32 +480,119 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 		}
 	}
 	
-	/** looks at googlecode's wiki page for grimwepa updates
+	/** checks if grimwepa, aircrack-ng, or pyrit need updating
 	*/
 	public void checkUpdates() {
+		Color col = Methods.getColor(Gui.cboColors.getSelectedIndex());
+		JPanel		panUpgrade = new JPanel();
+		panUpgrade.setPreferredSize(new Dimension(300, 100));
+		
+		JLabel		lblTitle = new JLabel("the following updates are available:");
+		panUpgrade.add(lblTitle);
+		
+		JCheckBox 	chkGW = new JCheckBox("upgrade to ...");
+		chkGW.setPreferredSize(new Dimension(250, 20));
+		// panUpgrade.add(chkGW);
+		
+		JCheckBox	chkAC = new JCheckBox("upgrade to aircrack-ng 1.1");
+		chkAC.setPreferredSize(new Dimension(250, 20));
+		// panUpgrade.add(chkAC);
+		
+		JCheckBox	chkPy = new JCheckBox("upgrade to pyrit 0.3.0");
+		chkPy.setPreferredSize(new Dimension(250, 20));
+		// panUpgrade.add(chkPy);
+		
+		JLabel		lblEnd = new JLabel("do you want to upgrade the selected items?");
+		
+		boolean atLeastOneUpdate = false;
+		
+		// check if grimwepa needs to be updated to the latest version
+		String strGW = checkGrimwepa();
+		if (!strGW.equals("") && !strGW.equals("n/a")) {
+			// grimwepa update!
+			atLeastOneUpdate = true;
+			chkGW.setText("upgrade to '" + strGW + "'");
+			panUpgrade.add(chkGW);
+			chkGW.setSelected(true);
+		}
+		
+		// check if aircrack-ng needs to be updated 1.1
+		if (checkAircrack()) {
+			atLeastOneUpdate = true;
+			chkAC.setSelected(true);
+			panUpgrade.add(chkAC);
+		}
+		
+		// check if pyrit needs to be updated to 0.3.0
+		if (checkPyrit()) {
+			atLeastOneUpdate = true;
+			chkPy.setSelected(true);
+			panUpgrade.add(chkPy);
+		}
+		
+		// if there are no new updates...	
+		if (!atLeastOneUpdate) {
+			// let 'em know, gtfo
+			JOptionPane.showMessageDialog(
+				null,
+				"no updates are available at this time.",
+				"grim wepa | updates",
+				JOptionPane.INFORMATION_MESSAGE
+			);
+			return;
+		}
+		
+		panUpgrade.add(lblEnd);
+		
+		if (JOptionPane.showConfirmDialog(
+				null,
+				panUpgrade,
+				"grim wepa | updates",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) 
+		{
+			
+			if (chkAC.isSelected())
+				upgradeAircrack();
+			
+			if (chkPy.isSelected())
+				upgradePyrit();
+			
+			if (chkGW.isSelected())
+				upgradeGrimwepa(strGW);
+			
+		}
+		
+	}
+	
+	/** checks grimwepa's google-code page for the latest version
+		on the site: http://code.google.com/p/griwmepa/wiki/Latest
+		@return latest version, if there is one, otherwise 'n/a' if we're already up-to-date
+	*/
+	public String checkGrimwepa() {
 		Methods.readExec("rm /tmp/gw-latest");
 		
-		String output[] = Methods.readExec("wget -O /tmp/gw-latest http://code.google.com/p/grimwepa/wiki/Latest");
+		String output[] = Methods.readExec("wget -O /tmp/gw-latest http://grimwepa.googlecode.com/files/latest.txt");
 		for (int i = 0; i < output.length; i++) {
 			if (output[i].indexOf("failed") >= 0) {
-				JOptionPane.showMessageDialog(
+				/*JOptionPane.showMessageDialog(
 					null,
 					"unable to access the internet.",
 					"grim wepa | updates",
 					JOptionPane.ERROR_MESSAGE
-				);
-				return;
+				);*/
+				return "n/a";
 			}
 		}
 		
 		if (!Methods.fileExists("/tmp/gw-latest")) {
-			JOptionPane.showMessageDialog(
+			/*JOptionPane.showMessageDialog(
 				null,
 				"error occurred. unable to retrieve update.",
 				"grim wepa | updates",
 				JOptionPane.ERROR_MESSAGE
-			);
-			return;
+			);*/
+			return "n/a";
 		}
 		
 		String ver = "", url = "";
@@ -492,34 +607,112 @@ public class GuiInstall extends Frame implements WindowListener, ActionListener,
 				break;
 		}
 		
+		Methods.readExec("rm /tmp/gw-latest");
+		
 		if (ver.compareTo(Main.VERSION) > 0) {
 			// newest version > this version, need to update
-			if (JOptionPane.showConfirmDialog(
-					null,
-					"a new version, " + ver + ", is available for download.\n\n" +
-					"do you want to download and run the newest version?",
-					"grim wepa | update",
-					JOptionPane.YES_NO_OPTION
-				) == JOptionPane.NO_OPTION) {
-				return;
-			}
-			
-			Methods.readExec("rm " + ver);
-			Methods.readExec("wget -O " + Methods.grimwepaPath.replaceAll(" ", "\\\\ ") + ver + " " + url);
-			
-			try {
-				Runtime.getRuntime().exec("java -jar " + ver);
-			} catch (IOException ioe) {}
-			System.exit(0);
+			return ver;
 		} else {
-			JOptionPane.showMessageDialog(
-				null,
-				"this version of grim wepa is the newest version.\n" +
-				"you are up to date.",
-				"grim wepa | update",
-				JOptionPane.INFORMATION_MESSAGE
-			);
+			return "";
 		}
+	}
+	
+	public void upgradeGrimwepa(String ver) {
+		Methods.readExec("rm " + ver);
+		Methods.readExec(	"wget" +
+							" -O " + Methods.grimwepaPath.replaceAll(" ", "\\\\ ") + ver + 
+							" http://grimwepa.googlecode.com/files/" + ver);
+		
+		try {
+				Runtime.getRuntime().exec("java -jar " + ver);
+		} catch (IOException ioe) {}
+		System.exit(0);
+		
+	}
+	
+	/** checks current version of aircrack-ng
+		@return true if user needs to update, false if they already have 1.1
+	*/
+	public boolean checkAircrack() {
+		String output[] = Methods.readExec("aircrack-ng --help");
+		for (int i = 0; i < output.length; i++) {
+			if (output[i].indexOf("Aircrack-ng 1.1") >= 0) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/** downloads and installs aircrack-ng v1.1*/
+	public void upgradeAircrack() {
+		// remove any running instances of aircrack
+		Methods.readExec("killall aircrack-ng");
+		// remove previously downloaded files
+		Methods.readExec("rm /tmp/aircrack-ng-1.1.tar.gz");
+		Methods.readExec("rm -rf /tmp/aircrack-ng-1.1");
+		// download and install aircrack using a shell script (in nice popup window)
+		String f = "wget -O /tmp/aircrack-ng-1.1.tar.gz " + 
+			"http://download.aircrack-ng.org/aircrack-ng-1.1.tar.gz\n" +
+			"tar -C /tmp/ -zxvf /tmp/aircrack-ng-1.1.tar.gz\n" +
+			"cd /tmp/aircrack-ng-1.1\n" +
+			"make\n" +
+			"make install\n";
+		
+		Methods.writeFile("/tmp/install-aircrack.sh", f);
+		
+		Methods.readExec("chmod 755 /tmp/install-aircrack.sh");
+		
+		Methods.readExec("xterm" +
+				" -fg " + (String)Gui.cboColors.getSelectedItem() + 
+				" -bg black" +
+				" -geom 100x15+0+0" + 
+				" -T aircrack-installer" +
+				" -e /tmp/install-aircrack.sh");
+		Methods.readExec("rm /tmp/install-aircrack.sh");
+		Methods.readExec("rm -rf /tmp/aircrack-ng-1.1");
+		Methods.readExec("rm /tmp/aircrack-ng-1.1.tar.gz");
+	}
+	
+	/** checks current version of pyrit
+		@return true if user needs to update, false if they already have 0.3.0
+	*/
+	public boolean checkPyrit() {
+		String output[] = Methods.readExec("pyrit help");
+		for (int i = 0; i < output.length; i++) {
+			if (output[i].indexOf("Pyrit 0.3.0") >= 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void upgradePyrit() {
+		// remove any running instances of pyrit
+		Methods.readExec("killall pyrit");
+		Methods.readExec("rm /tmp/pyrit-0.3.0.tar.gz");
+		Methods.readExec("rm -rf /tmp/pyrit-0.3.0");
+		// download and install pyrit using a shell script (in nice popup window)
+		String f = "wget -O /tmp/pyrit-0.3.0.tar.gz" +
+			" http://pyrit.googlecode.com/files/pyrit-0.3.0.tar.gz\n" +
+			"tar -C /tmp/ -zxvf /tmp/pyrit-0.3.0.tar.gz\n" +
+			"cd /tmp/pyrit-0.3.0\n" +
+			"python setup.py build\n" +
+			"python setup.py install\n";
+		
+		Methods.writeFile("/tmp/install-pyrit.sh", f);
+		
+		Methods.readExec("chmod 755 /tmp/install-pyrit.sh");
+		
+		Methods.readExec("xterm" +
+				" -fg " + (String)Gui.cboColors.getSelectedItem() + 
+				" -bg black" +
+				" -geom 100x15+0+0" + 
+				" -T pyrit-installer" +
+				" -e /tmp/install-pyrit.sh");
+		Methods.readExec("rm /tmp/install-pyrit.sh");
+		Methods.readExec("rm -rf /tmp/pyrit-0.3.0");
+		Methods.readExec("rm /tmp/pyrit-0.3.0.tar.gz");
 	}
 	
 	/** event is called when user attempts to close the window

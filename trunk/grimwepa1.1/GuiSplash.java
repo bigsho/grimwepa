@@ -11,16 +11,14 @@ public class GuiSplash extends Frame implements ActionListener {
 	public SplashScreen splash;
 	
 	/** i honestly have no idea what this does
-		@param g no clue
+		@param g no clue, 2d graphics object?
 		@param frame the frame? maybe?
 	*/
     static void renderSplashFrame(Graphics2D g, int frame) {
-        final String[] comps = {"foo", "bar", "baz"};
         g.setComposite(AlphaComposite.Clear);
         g.fillRect(120,140,200,40);
         g.setPaintMode();
         g.setColor(Color.BLACK);
-        g.drawString("Loading "+comps[(frame/5)%3]+"...", 120, 150);
     }
 	
 	/** constructor for this GUI;

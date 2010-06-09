@@ -4,7 +4,7 @@
 	and if user is logged in as root, exits if eitehr are false
 	
 	@author derv
-	@version 1.10a4 05/24/10
+	@version 1.10a6 05/29/10
 */
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 
 public class Main {
 	/** program version, for updating purposes */
-	public static final String VERSION = "grimwepa1.10a4.jar";
+	public static final String VERSION = "grimwepa1.10a6.jar";
 	
 	/** main program window*/
 	public static Gui guiWindow;
@@ -37,7 +37,7 @@ public class Main {
 			System.exit(0);
 		
 		// load gui window (program's main window) while splash is displayed
-		guiWindow = new Gui("GRIM WEPA v1.10 ALPHA 4");
+		guiWindow = new Gui("GRIM WEPA v1.10 ALPHA 6");
 		
 		// wait for a second (show off the awesome artwork)
 		Methods.pause(1);
