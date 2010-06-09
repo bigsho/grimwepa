@@ -23,7 +23,7 @@ All suggestions, comments, and bug reports are appreciated!!!
 
 === Required Applications ===
 All of the required/recommended apps _should be_ checked when the program is first loaded. 
-If you are missing any of these apps, the program will alert you accordingly.
+If you are missing any of these apps, the program will alert you accordingly.  You can find information on downloading/installing these apps (if you don't have them) using the [http://code.google.com/p/grimwepa/source/browse/trunk/grimwepa1.1/GUIDE#265 Guide located here]
 	* the aircrack-ng suite.  Tested with 1.0, should work with 1.1:
 		* airmon-ng
 		* aircrack-ng
@@ -59,6 +59,8 @@ they are found -- Just make sure there's a link in /usr/bin/
 		* optional: create desktop shortcut
 		* optional: create menu shortcut 
 			* backtrack > radio network analysis > 80211 > cracking
+		* update to newer versions of grim wepa when they are released
+		* update to newer version of aircrack-ng and pyrit automatically
 	* faster + more stable monitor-mode checks, asks to take device out of monitor mode on exit
 	* clients of target AP's sorted based on BSSID > user can only choose clients of a select AP
 	* corrected some of the WEP attacks
@@ -81,6 +83,19 @@ they are found -- Just make sure there's a link in /usr/bin/
 		* converts hex to ascii when applicable
 		* signs onto WEP and WPA1 encrypted access points using iwconfig
 
+
+=== New in v1.10 alpha 6 ===
+	* fixed '0 captured ivs' bug (for installed versions)
+	* fixed crunch passthrough error: directories with spaces now work
+	* fixed installer; works with spaces in install path
+	* 'check for updates' (inside installer) also checks aircrack-ng and pyrit
+		* installs aircrack-ng 1.1 or pyrit 0.3.0 if an older version is found on the user's computer.
+
+=== New in v1.10 alpha 5 ===
+	* fixed wpa dictionary attack error : 
+		* attempted to open "xterm-fg", not just 'xterm'. whoops!
+		* spaces in directory/file would cause attack to stop
+	* fixed aireplay-ng zombie process for WEP attacks
 
 === New in v1.10 alpha 4 ===
 	* auto-signon checkbox for both WEP and WPA -- signs onto access point if/when key is compromised.
