@@ -1,0 +1,138 @@
+GRIM WEPA v1.10 CHANGELOG
+
+TODO:	- download/install required packages at start, 
+		  instead of telling the user to install it themself.
+
+
+WHAT'S NEW (BIG CHANGES in v1.10)
+========================
+
+	splash/load screen.
+	colors! 8 user-selected colors to theme the program with.
+	install (and uninstall) grim wepa from inside the app:
+		- default install directory: /pentest/wireless/grimwepa/ (editable)
+		- creates link in /usr/bin/
+		- optional: create desktop shortcut
+		- optional: create menu shortcut 
+			- backtrack > radio network analysis > 80211 > cracking
+		- update to newer versions of grim wepa when they are released
+		- update to newer version of aircrack-ng and pyrit automatically
+	
+	WEP & WPA
+	---------
+	"auto signon" option. automatically signs on to access point if key is compromised.
+	faster + more stable monitor-mode checks, asks to take device out of monitor mode on exit.
+	clients of target AP's sorted based on BSSID > user can only choose clients of the selected AP.
+	stored passwords (key tank):
+		- remembers crack method, date, time, ssid, bssid, encryption type, and pps (for wep)
+		- displays most-recently-cracked password first for multiple entries
+		- ability to view & remove previously-cracked AP's
+		- backwards compatible with grimwepa v1.0
+		- converts hex to ascii when applicable
+		- signs onto both WEP and WPA encrypted access points using iwconfig/wpa_supplicant
+	
+	WEP
+	---------
+	new WEP capture method, "passive capture":
+		- uses no aireplay-ng attacks, waits for data.
+		- only useful when targetting a busy network (streaming media, torrents, etc)
+	fixed injection test. (hopefully)
+	
+	WPA	
+	---------
+	new WPA cracking methods:
+		- dictionary attack with pyrit (buggy, no output, but works!).
+		- crunch wordlist passthrough > passes generated passwords straight into aircrack-ng/pyrit.
+		- wordlist generator -> give it a lot of wordlist files and it'll combine/sort/filter/de-duplicate.
+			- ability to download wordlists from inside the app
+		- "online wpa cracker" -> directs browser to 2 online wpa key resolution services
+	handshake gets stripped from the cap file by pyrit or tshark.
+	all handshakes are backed up to ::grimwepaPath::/hs/ ...
+		- removes spaces/non-alpha-numeric chars from name, stores it as that name.cap
+		- for example: ssid "Netgear-5831!" would be stored as "Netgear5831.cap"
+	
+	OTHER
+	---------
+	verbose mode; outputs all executed commands to stdout
+		- designed for debugging
+		- start program with -v as an argument:
+			- ex: "grimwepa -v" or "java -jar grimwepa1.10a5.jar -v"
+
+
+
+=========================================================
+
+
+DETAILED (small) CHANGES
+
+v1.10 alpha 6 fixes
+-------------------
+	- fixed crunch passthrough error: directories with spaces now work
+	- fixed installer; works with spaces in install path
+	- fixed '0 captured ivs' bug (for installed versions)
+	- 'check for updates' also checks aircrack-ng and pyrit
+		- installs aircrack-ng 1.1 or pyrit 0.3.0 if an older version is found on the user's computer.
+
+v1.10 alpha 5 fixes
+-------------------
+	- fixed wpa dictionary attack error : 
+		- attempted to open "xterm-fg", not just 'xterm'. whoops!
+		- spaces in directory/file would cause attack to stop
+	- fixed aireplay-ng zombie process for WEP attacks
+
+v1.10 alpha 4 fixes / updates
+-----------------------------
+	- auto-signon checkbox for wep and wpa cracking attacks
+	- fixed signon for WPA (now handles WPA1, WPA2, and WPA1+2)
+		- uses iwlist to figure out encryption of access point
+	- new wep attack: 'passive capture'
+		- does not attempt any fake-auth or any aireplay attacks
+		- listens to a network passively (unintrusively).
+		- useful when network is generating lots of traffic (netflix)
+	- 'download wordlist' option for wordlist generator
+		- user selects which files to download (8 total)
+		- downloads from googlecode page and stores in ::grimwepapath::/wordlists/
+	- refreshing targets doesn't lose selected access point (small fix)
+	- included GUIDE (walkthrough for beginners)
+	- 'update' to latest version
+
+v1.10 alpha 3 fixes / updates
+-----------------------------
+	- verbose mode, displays every command-line executed in the console.
+		- enable with '-v' argument
+		- ex: "java -jar grimwepa1.10a3.jar -v" or "grimwepa -v"
+	- fixed bug with airmon-ng: attempted to view airmon-ng errors in iwconfig
+	- fixed gaping hole with injection test (huge programming error, whoops!)
+	- check if user is root, os is "Linux", at every boot; shutdown if not.
+
+v1.10 alpha 2 fixes / updates
+-----------------------------
+	- double-checked arpreplay, chopchp, fragmentation, and p0841 attacks; they work!
+	- fixed wep display: key was not showing first letter
+	- fixed wep fake authentication error! fuck yea!
+	- split 'wordlist generator' into: 'wordlist generator' (actual) and 'crunch passthrough' (original)
+	- added lots of 'killall' commands in an attempt to terminate zombie processes
+		- ex: after listening for targets, 'killall airodump-ng' is called
+		- this isn't very elegant code, but people have complained that processes aren't terminating
+		- this only attempts to kill wep/wpa-cracking-specific apps, like pyrit, aireplay airodump, aircrack, etc
+	- added required/recommended file check at first load (only)
+		- checks /usr/bin, /usr/sbin/ and /sbin/ for files used by grim wepa
+
+
+
+=========================================================
+
+
+developmental changes in v1.1
+-----------------------------
+re-wrote the majority if the source code;
+	- made it easier to read, follow, understand, and add to
+	- "readExec()", "readFile()", "writeFile()" are the biggest changes
+	- started naming conventions of classes GUI elements (less confusing).
+broke up complex classes into separate classes; instead of test2.java, there's now:
+	- Main.java - holds the main method
+	- Gui.java - builds the Gui front end, all commands are ran via Methods---
+	- Methods.java - where the program's functionality resides
+	- threads are easily distinguishable from gui classes
+	- attempt to reuse code as much as possible (threadWpaCracker is a good example)
+i learned Subversion! :D

@@ -1,0 +1,106 @@
+grim wepa
+
+date:	may 24, 2010
+auth:	derv82 at gmail
+site:	grimwepa.googlecode.com
+lang:	java
+ver:	1.10 alpha 6
+
+intended for use with Backtrack 4 linux distribution
+
+execution:
+	java -jar grimwepa1.10a6.jar [options]
+
+options:
+	-v, --verbose		outputs executed commands to stdout
+
+
+thanks
+----------------------
+AIRCRACK-NG TEAM
+	this program automates the wep/wpa cracking process 
+used by the aircrack-ng suite. the aircrack-ng team have 
+made an amazing, easy to use tool and i wrote a program 
+that automates their tool. grim wepa would be nothing
+without aircrack-ng!!!
+
+SANDMAN
+	he showed me backtrack, taught me linux, and showed me 
+everything i know about network security.
+
+SHAMANVIRTUEL
+	author of the spoonwep/spoonwpa series. i've looked
+up to SV for years. he heavily influenced me, which means 
+he also had a huge influence on grim wepa -- like the GUI!
+
+EVERYONE ELSE
+	suggestions, beta testing, bug reports, etc:
+		okra_man, mrkazu, Weasek, mixit, hmanxx, bobdamnit
+	there's others, i just can't remember right now.
+	thanks to everyone that helped make grimwepa what it is now.
+
+
+
+specifications
+----------------------
+all of the required/recommended apps are checked when grim wepa
+is first loaded. if you are missing any of these apps, the program 
+will not load, and instead will alert you which apps are missing.
+
+	required applications:
+		the aircrack-ng suite: (the body and head of grim wepa)
+			-airmon-ng
+			-aircrack-ng
+			-airodump-ng
+			-aireplay-ng
+			-packetforge-ng
+		
+		macchanger - for client-based wep attacks
+		ifconfig   - put device up/down
+		iwconfig   - check for monitor mode, signing on
+		sort       - for wordlist generation
+		wpa_supplicant - sign on, intel4965 chipset workaround
+		iwlist     - finding wpa encryption (before signing on)
+	
+	optional applications:
+		wget   - for downloading wordlists
+		tshark - strip the handshake from large capture files
+		pyrit  - cracking, super-fast, gpu-style.
+		crunch - generating passwords to passthrough to aircrack
+		uniq   - for removing duplicates in wordlist generation
+		pw-inspector - for filtering passwords (wordlist generator)
+
+see "GUIDE" for help installing required packages
+
+
+
+known issues
+----------------------
+your wireless card may not work; this is not my fault.
+	- you can solve your own hardware issues using google.
+pyrit in this version is 'sketchy'.
+	- it cannot run in an xterm window (no visual output)
+	- the dump file gets updated about every 10 min (infrequent)
+	- (sometimes) waits for all input before it starts cracking,
+		...meaning crunch passthrough takes a LONG time.
+aircrack-ng is reported by some to be  'unstable' with large wordlists (2gb+)
+intel 4965 chipset fix works for some, but not all.  (i am unable to test)
+designed using aircrack-ng suite version 1.0 r1661:
+	- works with aircrack-ng version 1.1
+	- uses '--output-format csv' arguments with airodump-ng which is not available
+		in older versions (BT3's aircrack-ng)
+directories with spaces in them have been buggy in the past
+	- i tried fixing this bug in this version; I think it's fixed.
+users have reported problems running grim wepa using openjre as the java runtime
+	- please use the java6 jre from sun!
+	- to get the jre, enter into a console:
+			apt-get install sun-java6-jre
+	- you can open grimwepa by right-clicking the .jar file, 
+			click 'Open With...', then 'Sun Java 6 Runtime'
+
+
+
+---------------------------
+copyright 2010 derv merkler
+this program is licensed under the gnu gpl
+gnu general public license: http://www.gnu.org/licenses/gpl.txt
