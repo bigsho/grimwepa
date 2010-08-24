@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "compiling..."
+
+javac *.java
+
+if [[ $? -eq 0  ]]
+then
+    echo "compiled successfully"
+	echo "building jar file..."
+    jar cvfm grimwepa-n900.jar mymanifest *.class default_pw.txt README grimwepa.xpm gw_splash.jpg charset.lst GUIDE >> /dev/null
+	echo "executing..."
+	echo ""
+    java -jar grimwepa-n900.jar $1
+else
+    echo "errors occurred while compiling"
+fi
