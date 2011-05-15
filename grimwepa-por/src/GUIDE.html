@@ -1,0 +1,335 @@
+GRIM WEPA 1.1 WALKTHROUGH
+=========================
+
+* troubleshooting is at the bottom
+
+
+step 1: what you need
+---------------------
+	BACKTRACK4 linux distribution!
+	BT4 contains these applications by default:
+		aircrack-ng suite
+		java6-jre
+		pyrit
+		crunch
+		macchanger
+		wpasupplicant
+		tshark
+		pw-inspector
+
+	these applications are required for grim wepa to run properly.
+	if you don't have these files, skip down to 'installing 
+	required packages'.
+
+
+step 2: run grim wepa
+---------------------
+	open a console, navigate to the grimwepa .jar file,	and type:
+		java -jar grimwepa#.##.jar
+	where #.## is the version number of grim wepa. 
+	
+	alternatively, you could just type:
+		java -jar grimwepa[tab]
+	and linux will auto-complete the filename for you.
+	
+	press enter and the program should begin loading.
+
+
+step 3: starting up
+-------------------
+	monitor mode is a state that some wireless devices can be in that
+	allow them to receive any and all data that is sent wirelessly, 
+	even data not destined to itself.
+	
+	when grimwepa first loads, it will look for wireless devices in 
+	monitor mode. if it finds any, they will be added to the list of
+	'wifi interfaces' at the top of the program. if not, the program 
+	will enumerate your wifi devices and ask you to select a device 
+	to put into monitor mode. select a device (if need be) and click 
+	'ok' to put the interface into monitor mode.
+
+
+step 4: scanning
+----------------
+	once you have a device selected that is in monitor mode, click 
+	'refresh targets' to scan for nearby access points.
+	
+	after a few seconds, access points will appear in the list. 
+	once you see the access point you want to attack, click	the
+	'stop refreshing' button and then select the access point.
+	
+	you should see options become enabled when you click on the AP.
+	depending on what kind of encryption the AP uses, you will have
+	different options...
+
+
+step 5: WEP-based attack
+------------------------
+	we can easily crack WEP. however, we need lots of Initialization
+	Vector packets (IVs) in order to crack the key.
+
+ATTACK METHODS
+	there are many options for generating IVs on WEP-based routers:
+	
+	arp-replay : aireplay-ng looks for the first packet it finds,
+		replays this packet to the router over and over.
+	
+	chop-chop : aireplay-ng attempts to guess a keystream until	it 
+		finds a valid one, then replays it over and over.
+	
+	fragmentation : aireplay-ng attempts to generate a valid
+		keystream based on other packets, replays over and over.
+	
+	cafe-latte : queries a client for new IVs
+	
+	-p0841 : an off-shoot of the arp-replay attack; use if 
+		arp-replay isn't effective.
+	
+	passive capture : grimwepa just listens using airodump-ng, does 
+		not try to geneate new IVs, simply listens. this is useful 
+		only when the router is generating lots of data on it's own
+		(such as streaming videos, torrents, etc).
+	
+	some methods work better against certain routers. sometimes you 
+	have to try a few methods before you find one that works well.
+	
+CLIENTS
+	some attacks work better when you target a client, others do not.
+	if you want try to a client-based attack, check the 'use client
+	in attack' checkbox and select one.  if no clients are found,
+	your wifi card's mac address will be used as the client, and the
+	program will attempt to 'fake-authenticate' with the router.
+
+TEST INJECTION
+	a way to tell if you are close enough to the access point to
+	inject packets, which is required for most attacks to work.
+	also, lets you know if your wireless card is capable of injecting.
+	output is in the main window's status bar (at the bottom).
+
+DEAUTH
+	deauthenticates a connected client as an attempt to generate new
+	IVs. only works with connected clients.
+
+START ATTACK
+	once you have chosen a client (or not) and an attack method, click
+	'start attack' to begin the selected attack. you will see different
+	'xterm' windows appear as the attack is performed. do not close 
+	these windows!
+
+START CRACKING
+	you can start cracking the WEP key as soon as you have 1 IVs, 
+	however	it is juvenile to try to crack a WEP key with anything 
+	less than 10,000 IVs, which is why grim wepa will automatically 
+	start cracking after it reaches the 10,000 IVs mark. aircrack-ng 
+	will automatically start cracking as new IVs are received, so do 
+	not repeatedly click 'stop cracking' then 'start cracking', this 
+	will only slow down the cracking process.
+
+AUTO SIGNON
+	if you want grim wepa to signon to the access point after it has 
+	compromised the WEP key, check this box.  grim wepa uses iwconfig
+	to connect to WEP-encrypted access points.
+
+
+step 6: WPA-based attack
+------------------------
+OVERVIEW
+	in order to crack a WPA-encrypted access point, we need a '4-way
+	handshake' from the AP. we can only intercept one of these by 
+	listening with airodump-ng while a client (device) legitimately 
+	connects to the access point.  once we have the handshake, we can
+	begin cracking.
+	
+	there is only brute-force-based attacks for WPA; there is no way 
+	to decypher the WPA passphrase except by brute force.
+
+CLIENTS
+	this is when clients are very helpful. we need to be listening 
+	while a client connects to the access point. with a known client, 
+	we can simply boot them off of the router (using a deauth) and 
+	then capture the handshake when they sign back in.
+
+START HANDSHAKE CAPTURE
+	since we need to be listening to the router while someone else 
+	connects,
+	we can send 'deauthenticate' packets to the router, disguised as 
+	the client.  when this happens, the client will be kicked off.
+	usually, most computers will automatically reconnect to an access
+	point after being kicked off, and it is during this this time 
+	that we will capture the handshake!
+	
+	if no clients are selected, we will send a 'general' deauth 
+	packet, which attempts to kick everyone off of the router. these 
+	are dirtier and less effective, so having a targeted client is a 
+	much more reliable and elegant method of cracking WPA.
+
+CRACK USING...
+	once we have a 4-way handshake captured, we can use different 
+	cracking techniques, all of which are brute-force-based:
+	
+	dictionary attack : tried and true system, you select a wordlist
+	 	file, and aircrack-ng tries every word in the file against 
+		the hadnshake.
+	
+	crunch passthrough : if you don't want to create a wordlist, you
+		can use the password-generating tool 'crunch' to pass words 
+		to aircrack-ng without having to generate a file first. this 
+		method uses less space and is slightly faster, but still 
+		takes a VERY long time (tries every possible permutation).
+	
+	dictionary + pyrit : same as dictionary attack, but uses pyrit's
+		"attack_passthrough" command to attempt to find the passphrase.
+		pyrit does not output as much as aircrack-ng, and since pyrit
+		is piped, there is no output whatsoever. all you can do is 
+		wait and hope for the best.
+	
+	wordlist generator : uses other wordlists to build a bigger 
+		wordlist. add wordlists to the list (or download them), select 
+		an output file (destination), and click 'generate!'. large 
+		lists take a while, and lock up the program, but be patient as 
+		the file is being generated! after the wordlist is generated, 
+		click 'start cracking' to run a dictionary attack using your 
+		new wordlist.
+	
+	online wpa cracker : there are sites that offer the service of 
+		trying many passwords on your handshake file for a nominal fee.
+		these sites have very fast computers and only take a couple of
+		hours as oppossed to the entire week your machine would take.
+	
+
+AUTO SIGNON
+	same as WEP auto-signon.  automatically signs onto the access point 
+	if the passphrase is compromised.
+
+
+step 7: key management
+----------------------
+	clicking on a target that you have already cracked will display
+	the last-cracked key in the border around the wep/wpa methods, ex:
+		wpa | targeting 'XX:XX:XX:XX:XX' | key: 'thekeyhere'
+	
+	also, there is a 'key tank' (button is next to 'refresh targets'.
+	this holds all cracked keys as well as information about the crack,
+	such as SSID, BSSID, date, method, encryption type, and any other
+	information that might be useful in the future.
+	
+	you can remove items from the key tank, and also sign on to
+	access points from the key tank... you need to be within range of
+	the access point in order to be able to sign in.
+
+
+step 8: installing
+------------------
+	so, you like grim wepa enough to put it onto your system? great!
+	there is an 'install' button on the top-left of the program. click
+	this to bring up the install/uninstall window. this part is pretty 
+	self-explanatory
+
+
+step x: troubleshooting
+-----------------------
+errors during load:
+	grimwepa checks /usr/bin/, /sbin/ and /usr/sbin/ for required 
+	applications, if they aren't found, the program exits immediately.
+	you need these programs. see the 'installing' tutorial below.
+	
+	if you are not root when you run grim wepa, you will see an error.
+	to run grimwepa as root, type:
+		su
+	then the root password. then open grimwepa again.
+
+no wifi interfaces appear:
+	no my problem. type 'lsusb' or 'lsacpi' to find what wifi drivers 
+	you have. google them. google. google. google!
+
+errors or no targets appear when refreshing:
+	you might need to install patched drivers for your wifi card. 
+	or perhaps your aircrack-ng suite is out of date.
+
+injection test fails everytime:
+	once again, your wifi drivers are probably not patched.  google 
+	is your friend.
+
+something else doesn't work right:
+	grimwepa 1.1 has a 'verbose' mode option... when running grimwepa,
+	include the -v argument. for example:
+		java -jar grimwepa#.##.jar -v
+	or
+		grimwepa -v
+	
+	this will force grimwepa to output every command that it executes
+	to the command-line, so you can see EXACTLY what it is trying to do.
+	just copy/paste the commands to get an idea of what it is attempting,
+	and maybe you can solve the error yourself.
+
+
+step xx: installing required packages
+=====================================
+these commands have been tested in Backtrack 4
+they should work on other versions of Ubuntu (depending on repositories)
+
+
+AIRCRACK-NG
+	# this install includes airodump-ng, aircrack-ng, airmon-ng
+	#		aireplay-ng, packetforge-ng, etc.
+	wget http://download.aircrack-ng.org/aircrack-ng-1.1.tar.gz
+	tar -zxvf aircrack-ng-1.1.tar.gz
+	cd aircrack-ng-1.1
+	make
+	make install
+	# delete this, we've already installed it.
+	cd ..
+	rm -rf aircrack-ng-1.1
+	rm aircrack-ng-1.1.tar.gz
+
+
+JAVA
+	# installs the latest java runtime environment
+	apt-get install sun-java6-jre
+
+
+PW-INSPECTOR
+	# can be found in the HYDRA suite:
+	# this code downloads the suite, extracts it, 
+	# 	compiles pw-inspector, copies it to /usr/bin/,
+	# 	then deletes the directory and tarball.
+	wget http://freeworld.thc.org/releases/hydra-5.4-src.tar.gz
+	tar -zxvf hydra-5.4-src.tar.gz
+	cd hydra-5.4-src
+	g++ pw-inspector.c -o pw-inspector
+	cp pw-inspector /usr/bin
+	# now delete these files, we don't need them anymore.
+	cd ..
+	rm -rf hydra-5.4-src
+	rm hydra-5.4-src.tar.gz
+
+
+CRUNCH
+	# download, extract, compile, copy to /usr/bin, delete
+	# no need to copy charset.lst , built into grimwepa's JAR file
+	wget http://cdnetworks-us-1.dl.sourceforge.net/project/crunch-wordlist/crunch-wordlist/crunch2.4.tgz
+	tar -xvf crunch2.4.tgz
+	cd crunch
+	gcc crunch.c -o crunch
+	cp crunch /usr/bin/
+	cd ..
+	rm -rf crunch
+	rm crunch2.4.tgz
+
+
+PYRIT, CRUNCH, MACCHANGER, and the rest
+	# i got lazy... just use apt-get
+	apt-get install pyrit
+	apt-get install crunch
+	apt-get install macchanger
+	apt-get install tshark
+	apt-get install wpasupplicant
+
+
+that's it! these packages should be all you need to run grim wepa!
+
+
+---------------------------
+copyright 2010 derv merkler
+this program is licensed under the gnu gpl
+gnu gpl: http://www.gnu.org/licenses/gpl.txt
